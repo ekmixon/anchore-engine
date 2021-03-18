@@ -52,3 +52,28 @@ def delete_image(image_id: str) -> http_utils.APIResponse:
         )
 
     return delete_image_resp
+
+
+def get_image_vulnerabilites(image_id: str) -> http_utils.APIResponse:
+    if not image_id:
+        raise ValueError("Cannot ingress image to policy engine without image id")
+
+    image_vulnerabilities_resp = http_utils.http_get(
+        [
+            "users",
+            POLICY_ENGINE_API_CONF.get("ANCHORE_API_USER"),
+            "images",
+            image_id,
+            "vulnerabilities",
+        ],
+        config=policy_engine_api_conf,
+    )
+
+    if image_vulnerabilities_resp.code > 300:
+        raise http_utils.RequestFailedError(
+            image_vulnerabilities_resp.url,
+            image_vulnerabilities_resp.code,
+            image_vulnerabilities_resp.body,
+        )
+
+    return image_vulnerabilities_resp

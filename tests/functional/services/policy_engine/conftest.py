@@ -2,16 +2,14 @@ import json
 from os import path
 from typing import Dict
 
+import jsonschema
 import pytest
 
 from tests.functional.services.catalog.utils import catalog_api
-from tests.functional.services.policy_engine.utils.utils import (
-    AnalysisFile,
-)
 from tests.functional.services.catalog.utils.utils import add_or_replace_document
 from tests.functional.services.policy_engine.utils import images_api
+from tests.functional.services.policy_engine.utils.utils import AnalysisFile
 from tests.functional.services.utils import http_utils
-
 
 CURRENT_DIR = path.dirname(path.abspath(__file__))
 ANALYSIS_FILES_DIR = path.join(CURRENT_DIR, "analysis_files")
@@ -19,12 +17,16 @@ ANALYSIS_FILES = [
     AnalysisFile(
         "alpine_latest.json",
         "sha256:4661fb57f7890b9145907a1fe2555091d333ff3d28db86c3bb906f6a2be93c87",
-    )
+    ),
+    AnalysisFile(
+        "centos_8.json",
+        "sha256:dbbacecc49b088458781c16f3775f2a2ec7521079034a7ba499c8b0bb7f86875",
+    ),
 ]
 IMAGE_DIGEST_ID_MAP: Dict[str, str] = {}
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture
 def add_catalog_documents(request) -> None:
     for analysis_file in ANALYSIS_FILES:
         file_path = path.join(ANALYSIS_FILES_DIR, analysis_file.filename)
@@ -50,6 +52,58 @@ def add_catalog_documents(request) -> None:
     request.addfinalizer(remove_documents_and_image)
 
 
+@pytest.fixture
+def ingress_image(add_catalog_documents):
+    def _ingress_image(image_digest: str):
+        fetch_url = f"catalog://{http_utils.DEFAULT_API_CONF['ANCHORE_API_ACCOUNT']}/analysis_data/{image_digest}"
+        image_id = IMAGE_DIGEST_ID_MAP[image_digest]
+        return images_api.ingress_image(fetch_url, image_id)
+
+    return _ingress_image
+
+
 @pytest.fixture(scope="session")
 def image_digest_id_map():
     return IMAGE_DIGEST_ID_MAP
+
+
+@pytest.fixture
+def vulnerability_jsonschema():
+    expected_schema = {
+        "type": "object",
+        "required": ["cpe_report", "image_id", "legacy_report"],
+        "properties": {
+            "cpe_report": {"type": "array"},
+            "image_id": {"type": "string"},
+            "legacy_report": {
+                "type": "object",
+                "required": ["multi"],
+                "properties": {
+                    "multi": {
+                        "type": "object",
+                        "required": ["result", "url_column_index", "warns"],
+                        "properties": {
+                            "result": {
+                                "type": "object",
+                                "required": ["colcount", "header", "rowcount", "rows"],
+                                "properties": {
+                                    "colcount": {"type": "number"},
+                                    "header": {
+                                        "type": "array",
+                                        "items": {"type": "string"},
+                                    },
+                                    "rowcount": {"type": "number"},
+                                    "rows": {"type": "array"},
+                                },
+                            },
+                            "url_column_index": {"type": "number"},
+                            "warns": {"type": "array"},
+                        },
+                    }
+                },
+            },
+            "user_id": {"type": "string"},
+        },
+    }
+    jsonschema.Draft7Validator.check_schema(expected_schema)
+    return expected_schema
