@@ -22,6 +22,10 @@ ANALYSIS_FILES = [
         "centos_8.json",
         "sha256:dbbacecc49b088458781c16f3775f2a2ec7521079034a7ba499c8b0bb7f86875",
     ),
+    AnalysisFile(
+        "node_15_12_0.json",
+        "sha256:88ef7fa504af971315e02eea173a9df690e9e0a0c9591af3ed62a9c5e0bb8217",
+    ),
 ]
 IMAGE_DIGEST_ID_MAP: Dict[str, str] = {}
 
