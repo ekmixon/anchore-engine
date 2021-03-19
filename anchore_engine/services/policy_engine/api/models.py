@@ -364,6 +364,7 @@ class ImageIngressRequest(JsonSerializable):
 class ImageIngressResponse(JsonSerializable):
     class ImageIngressResponseV1Schema(Schema):
         status = fields.Str()
+        vulnerability_report = fields.Dict()
 
         @post_load
         def make(self, data, **kwargs):
@@ -371,8 +372,9 @@ class ImageIngressResponse(JsonSerializable):
 
     __schema__ = ImageIngressResponseV1Schema()
 
-    def __init__(self, status=None):
+    def __init__(self, status=None, vulnerability_report=None):
         self.status = status
+        self.vulnerability_report = vulnerability_report
 
 
 class TriggerParamSpec(JsonSerializable):

@@ -1064,6 +1064,7 @@ def ingress_image(ingress_request):
             content_conn_timeout=conn_timeout,
             content_read_timeout=read_timeout,
         )
+        t.execute()
         result = t.execute()
         resp = ImageIngressResponse()
         if not result:
@@ -1071,6 +1072,7 @@ def ingress_image(ingress_request):
         else:
             # We're doing a sync call above, so just send loaded. It should be 'accepted' once async works.
             resp.status = "loaded"
+        resp.vulnerability_report = get_image_vulnerabilities(req.user_id, req.image_id)
         return resp.to_json(), 200
     except Exception as e:
         log.exception("Error loading image into policy engine")

@@ -67,43 +67,60 @@ def image_digest_id_map():
     return IMAGE_DIGEST_ID_MAP
 
 
+VULNERABILITY_JSONSCHEMA = {
+    "type": "object",
+    "required": ["cpe_report", "image_id", "legacy_report"],
+    "properties": {
+        "cpe_report": {"type": "array"},
+        "image_id": {"type": "string"},
+        "legacy_report": {
+            "type": "object",
+            "required": ["multi"],
+            "properties": {
+                "multi": {
+                    "type": "object",
+                    "required": ["result", "url_column_index", "warns"],
+                    "properties": {
+                        "result": {
+                            "type": "object",
+                            "required": ["colcount", "header", "rowcount", "rows"],
+                            "properties": {
+                                "colcount": {"type": "number"},
+                                "header": {
+                                    "type": "array",
+                                    "items": {"type": "string"},
+                                },
+                                "rowcount": {"type": "number"},
+                                "rows": {"type": "array"},
+                            },
+                        },
+                        "url_column_index": {"type": "number"},
+                        "warns": {"type": "array"},
+                    },
+                }
+            },
+        },
+        "user_id": {"type": "string"},
+    },
+}
+
+INGRESS_JSONSCHEMA = {
+    "type": "object",
+    "required": ["status", "vulnerability_report"],
+    "properties": {
+        "status": {"type": "string"},
+        "vulnerability_report": VULNERABILITY_JSONSCHEMA,
+    },
+}
+
+
 @pytest.fixture
 def vulnerability_jsonschema():
-    expected_schema = {
-        "type": "object",
-        "required": ["cpe_report", "image_id", "legacy_report"],
-        "properties": {
-            "cpe_report": {"type": "array"},
-            "image_id": {"type": "string"},
-            "legacy_report": {
-                "type": "object",
-                "required": ["multi"],
-                "properties": {
-                    "multi": {
-                        "type": "object",
-                        "required": ["result", "url_column_index", "warns"],
-                        "properties": {
-                            "result": {
-                                "type": "object",
-                                "required": ["colcount", "header", "rowcount", "rows"],
-                                "properties": {
-                                    "colcount": {"type": "number"},
-                                    "header": {
-                                        "type": "array",
-                                        "items": {"type": "string"},
-                                    },
-                                    "rowcount": {"type": "number"},
-                                    "rows": {"type": "array"},
-                                },
-                            },
-                            "url_column_index": {"type": "number"},
-                            "warns": {"type": "array"},
-                        },
-                    }
-                },
-            },
-            "user_id": {"type": "string"},
-        },
-    }
-    jsonschema.Draft7Validator.check_schema(expected_schema)
-    return expected_schema
+    jsonschema.Draft7Validator.check_schema(VULNERABILITY_JSONSCHEMA)
+    return jsonschema.Draft7Validator(VULNERABILITY_JSONSCHEMA)
+
+
+@pytest.fixture
+def ingress_jsonschema():
+    jsonschema.Draft7Validator.check_schema(INGRESS_JSONSCHEMA)
+    return jsonschema.Draft7Validator(INGRESS_JSONSCHEMA)
