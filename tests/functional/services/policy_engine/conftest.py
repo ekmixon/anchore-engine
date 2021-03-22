@@ -13,6 +13,7 @@ from tests.functional.services.utils import http_utils
 
 CURRENT_DIR = path.dirname(path.abspath(__file__))
 ANALYSIS_FILES_DIR = path.join(CURRENT_DIR, "analysis_files")
+VULN_OUTPUT_DIR = path.join(CURRENT_DIR, "expected_output")
 ANALYSIS_FILES = [
     AnalysisFile(
         "alpine_latest.json",
@@ -128,3 +129,14 @@ def vulnerability_jsonschema():
 def ingress_jsonschema():
     jsonschema.Draft7Validator.check_schema(INGRESS_JSONSCHEMA)
     return jsonschema.Draft7Validator(INGRESS_JSONSCHEMA)
+
+
+@pytest.fixture
+def expected_content():
+    def get_expected_content(image_digest):
+        file_path = path.join(VULN_OUTPUT_DIR, f"{image_digest}.json")
+        with open(file_path, "r") as f:
+            file_contents = f.read()
+            return json.loads(file_contents)
+
+    return get_expected_content
