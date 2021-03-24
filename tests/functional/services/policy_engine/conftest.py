@@ -6,8 +6,7 @@ from typing import Dict
 import jsonschema
 import pytest
 from tests.functional.services.catalog.utils import catalog_api
-from tests.functional.services.catalog.utils.utils import \
-    add_or_replace_document
+from tests.functional.services.catalog.utils.utils import add_or_replace_document
 from tests.functional.services.policy_engine.utils import images_api
 from tests.functional.services.utils import http_utils
 
