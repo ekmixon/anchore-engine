@@ -1,20 +1,28 @@
 import json
+from dataclasses import dataclass
 from os import path
 from typing import Dict
 
 import jsonschema
 import pytest
-
 from tests.functional.services.catalog.utils import catalog_api
-from tests.functional.services.catalog.utils.utils import add_or_replace_document
+from tests.functional.services.catalog.utils.utils import \
+    add_or_replace_document
 from tests.functional.services.policy_engine.utils import images_api
-from tests.functional.services.policy_engine.utils.utils import AnalysisFile
 from tests.functional.services.utils import http_utils
 
 CURRENT_DIR = path.dirname(path.abspath(__file__))
 ANALYSIS_FILES_DIR = path.join(CURRENT_DIR, "analysis_files")
 VULN_OUTPUT_DIR = path.join(CURRENT_DIR, "expected_output")
 SCHEMA_FILE_DIR = path.join(CURRENT_DIR, "schema_files")
+
+
+@dataclass
+class AnalysisFile:
+    filename: str
+    image_digest: str
+
+
 ANALYSIS_FILES = [
     AnalysisFile(
         "alpine_latest.json",
@@ -29,6 +37,7 @@ ANALYSIS_FILES = [
         "sha256:88ef7fa504af971315e02eea173a9df690e9e0a0c9591af3ed62a9c5e0bb8217",
     ),
 ]
+
 IMAGE_DIGEST_ID_MAP: Dict[str, str] = {}
 
 
@@ -92,7 +101,7 @@ def load_jsonschema(filename):
     return schema
 
 
-class SchemaResolver(object):
+class SchemaResolver:
     _instance = None
     resolver = None
 
