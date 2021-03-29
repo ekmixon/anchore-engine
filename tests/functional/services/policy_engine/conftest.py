@@ -6,6 +6,8 @@ from typing import Callable, Dict
 
 import jsonschema
 import pytest
+import logging
+import psycopg2
 
 from anchore_engine.db import session_scope
 from anchore_engine.db.entities.common import do_disconnect, end_session, initialize
@@ -313,13 +315,22 @@ SEED_FILE_TO_DB_TABLE_MAP = {
     "feed_data_cpev2_vulnerabilities.json": CpeV2Vulnerability,
 }
 
+SEED_FILE_TO_METADATA_MAP = {
+    "feed_data_vulnerabilities.json": "metadata_json",
+    "feed_data_vulnerabilities_fixed_artifacts.json": "fix_metadata"
+}
 
 def load_seed_file_rows(file_name: str):
     json_file = os.path.join(SEED_FILE_DIR, file_name)
     with open(json_file, "rb") as f:
         for line in f:
-            linetext = line.decode("unicode-escape").strip()
-            yield json.loads(linetext)
+            linetext = line.decode("unicode_escape").strip()
+            json_content = json.loads(linetext)
+            if file_name in SEED_FILE_TO_METADATA_MAP:
+                json_key = SEED_FILE_TO_METADATA_MAP[file_name]
+                if json_content[json_key] is not None:
+                    json_content[json_key] = json.loads(json_content[json_key])
+            yield json_content
 
 
 @pytest.fixture(scope="session")
@@ -328,6 +339,10 @@ def insert(set_env_vars, anchore_db):
         all_records = []
         for seed_file_name, entry_cls in SEED_FILE_TO_DB_TABLE_MAP.items():
             for db_entry in load_seed_file_rows(seed_file_name):
+                # try:
+                #     db.add(entry_cls(**db_entry))
+                # except psycopg2.errors.UniqueViolation:
+                #     pass
                 all_records.append(entry_cls(**db_entry))
         db.bulk_save_objects(all_records)
         db.commit()
