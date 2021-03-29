@@ -1,0 +1,2169 @@
+{
+  "cpe_report": [
+    {
+      "cpe": "cpe:a:log4j:log4j:1.2.12:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2019-17571",
+      "name": "log4j",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": false,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "NONE",
+              "availability_impact": "PARTIAL",
+              "base_score": 7.5,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 10.0,
+              "impact_score": 6.4,
+              "integrity_impact": "PARTIAL"
+            },
+            "severity": "High",
+            "vector_string": "AV:N/AC:L/Au:N/C:P/I:P/A:P",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "HIGH",
+              "base_score": 9.8,
+              "base_severity": "Critical",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 3.9,
+              "impact_score": 5.9,
+              "integrity_impact": "HIGH",
+              "privileges_required": "NONE",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "version": "3.1"
+          },
+          "id": "CVE-2019-17571"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/log4j/log4j/1.2.12/log4j-1.2.12.jar",
+      "pkg_type": "java",
+      "severity": "Critical",
+      "vendor_data": [],
+      "version": "1.2.12",
+      "vulnerability_id": "CVE-2019-17571"
+    },
+    {
+      "cpe": "cpe:a:log4j:log4j:1.2.12:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2020-9488",
+      "name": "log4j",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": false,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "MEDIUM",
+              "access_vector": "NETWORK",
+              "authentication": "NONE",
+              "availability_impact": "NONE",
+              "base_score": 4.3,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 8.6,
+              "impact_score": 2.9,
+              "integrity_impact": "NONE"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:M/Au:N/C:P/I:N/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "HIGH",
+              "attack_vector": "NETWORK",
+              "availability_impact": "NONE",
+              "base_score": 3.7,
+              "base_severity": "Low",
+              "confidentiality_impact": "LOW",
+              "exploitability_score": 2.2,
+              "impact_score": 1.4,
+              "integrity_impact": "NONE",
+              "privileges_required": "NONE",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N",
+            "version": "3.1"
+          },
+          "id": "CVE-2020-9488"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/log4j/log4j/1.2.12/log4j-1.2.12.jar",
+      "pkg_type": "java",
+      "severity": "Low",
+      "vendor_data": [],
+      "version": "1.2.12",
+      "vulnerability_id": "CVE-2020-9488"
+    },
+    {
+      "cpe": "cpe:a:maven-aether-provider:maven:3.0:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2019-10358",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": false,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "SINGLE",
+              "availability_impact": "NONE",
+              "base_score": 4.0,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 8.0,
+              "impact_score": 2.9,
+              "integrity_impact": "NONE"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:L/Au:S/C:P/I:N/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "NONE",
+              "base_score": 6.5,
+              "base_severity": "Medium",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 2.8,
+              "impact_score": 3.6,
+              "integrity_impact": "NONE",
+              "privileges_required": "LOW",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+            "version": "3.0"
+          },
+          "id": "CVE-2019-10358"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/maven-aether-provider/3.0/maven-aether-provider-3.0.jar",
+      "pkg_type": "java",
+      "severity": "Medium",
+      "vendor_data": [],
+      "version": "3.0",
+      "vulnerability_id": "CVE-2019-10358"
+    },
+    {
+      "cpe": "cpe:a:maven-archiver:maven:2.5:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2017-1000397",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": null,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "MEDIUM",
+              "access_vector": "NETWORK",
+              "authentication": "NONE",
+              "availability_impact": "NONE",
+              "base_score": 4.3,
+              "confidentiality_impact": "NONE",
+              "exploitability_score": 8.6,
+              "impact_score": 2.9,
+              "integrity_impact": "PARTIAL"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:M/Au:N/C:N/I:P/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "HIGH",
+              "attack_vector": "NETWORK",
+              "availability_impact": "NONE",
+              "base_score": 5.9,
+              "base_severity": "Medium",
+              "confidentiality_impact": "NONE",
+              "exploitability_score": 2.2,
+              "impact_score": 3.6,
+              "integrity_impact": "HIGH",
+              "privileges_required": "NONE",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "version": "3.0"
+          },
+          "id": "CVE-2017-1000397"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/maven-archiver/2.5/maven-archiver-2.5.jar",
+      "pkg_type": "java",
+      "severity": "Medium",
+      "vendor_data": [],
+      "version": "2.5",
+      "vulnerability_id": "CVE-2017-1000397"
+    },
+    {
+      "cpe": "cpe:a:maven-archiver:maven:2.5:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2019-10358",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": false,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "SINGLE",
+              "availability_impact": "NONE",
+              "base_score": 4.0,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 8.0,
+              "impact_score": 2.9,
+              "integrity_impact": "NONE"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:L/Au:S/C:P/I:N/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "NONE",
+              "base_score": 6.5,
+              "base_severity": "Medium",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 2.8,
+              "impact_score": 3.6,
+              "integrity_impact": "NONE",
+              "privileges_required": "LOW",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+            "version": "3.0"
+          },
+          "id": "CVE-2019-10358"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/maven-archiver/2.5/maven-archiver-2.5.jar",
+      "pkg_type": "java",
+      "severity": "Medium",
+      "vendor_data": [],
+      "version": "2.5",
+      "vulnerability_id": "CVE-2019-10358"
+    },
+    {
+      "cpe": "cpe:a:maven-artifact:maven:3.0:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2019-10358",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": false,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "SINGLE",
+              "availability_impact": "NONE",
+              "base_score": 4.0,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 8.0,
+              "impact_score": 2.9,
+              "integrity_impact": "NONE"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:L/Au:S/C:P/I:N/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "NONE",
+              "base_score": 6.5,
+              "base_severity": "Medium",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 2.8,
+              "impact_score": 3.6,
+              "integrity_impact": "NONE",
+              "privileges_required": "LOW",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+            "version": "3.0"
+          },
+          "id": "CVE-2019-10358"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/maven-artifact/3.0/maven-artifact-3.0.jar",
+      "pkg_type": "java",
+      "severity": "Medium",
+      "vendor_data": [],
+      "version": "3.0",
+      "vulnerability_id": "CVE-2019-10358"
+    },
+    {
+      "cpe": "cpe:a:maven-core:maven:3.0:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2019-10358",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": false,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "SINGLE",
+              "availability_impact": "NONE",
+              "base_score": 4.0,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 8.0,
+              "impact_score": 2.9,
+              "integrity_impact": "NONE"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:L/Au:S/C:P/I:N/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "NONE",
+              "base_score": 6.5,
+              "base_severity": "Medium",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 2.8,
+              "impact_score": 3.6,
+              "integrity_impact": "NONE",
+              "privileges_required": "LOW",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+            "version": "3.0"
+          },
+          "id": "CVE-2019-10358"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/maven-core/3.0/maven-core-3.0.jar",
+      "pkg_type": "java",
+      "severity": "Medium",
+      "vendor_data": [],
+      "version": "3.0",
+      "vulnerability_id": "CVE-2019-10358"
+    },
+    {
+      "cpe": "cpe:a:maven-model-builder:maven:3.0:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2019-10358",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": false,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "SINGLE",
+              "availability_impact": "NONE",
+              "base_score": 4.0,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 8.0,
+              "impact_score": 2.9,
+              "integrity_impact": "NONE"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:L/Au:S/C:P/I:N/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "NONE",
+              "base_score": 6.5,
+              "base_severity": "Medium",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 2.8,
+              "impact_score": 3.6,
+              "integrity_impact": "NONE",
+              "privileges_required": "LOW",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+            "version": "3.0"
+          },
+          "id": "CVE-2019-10358"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/maven-model-builder/3.0/maven-model-builder-3.0.jar",
+      "pkg_type": "java",
+      "severity": "Medium",
+      "vendor_data": [],
+      "version": "3.0",
+      "vulnerability_id": "CVE-2019-10358"
+    },
+    {
+      "cpe": "cpe:a:maven-model:maven:3.0:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2019-10358",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": false,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "SINGLE",
+              "availability_impact": "NONE",
+              "base_score": 4.0,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 8.0,
+              "impact_score": 2.9,
+              "integrity_impact": "NONE"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:L/Au:S/C:P/I:N/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "NONE",
+              "base_score": 6.5,
+              "base_severity": "Medium",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 2.8,
+              "impact_score": 3.6,
+              "integrity_impact": "NONE",
+              "privileges_required": "LOW",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+            "version": "3.0"
+          },
+          "id": "CVE-2019-10358"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/maven-model/3.0/maven-model-3.0.jar",
+      "pkg_type": "java",
+      "severity": "Medium",
+      "vendor_data": [],
+      "version": "3.0",
+      "vulnerability_id": "CVE-2019-10358"
+    },
+    {
+      "cpe": "cpe:a:maven-plugin-api:maven:3.0:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2019-10358",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": false,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "SINGLE",
+              "availability_impact": "NONE",
+              "base_score": 4.0,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 8.0,
+              "impact_score": 2.9,
+              "integrity_impact": "NONE"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:L/Au:S/C:P/I:N/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "NONE",
+              "base_score": 6.5,
+              "base_severity": "Medium",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 2.8,
+              "impact_score": 3.6,
+              "integrity_impact": "NONE",
+              "privileges_required": "LOW",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+            "version": "3.0"
+          },
+          "id": "CVE-2019-10358"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/maven-plugin-api/3.0/maven-plugin-api-3.0.jar",
+      "pkg_type": "java",
+      "severity": "Medium",
+      "vendor_data": [],
+      "version": "3.0",
+      "vulnerability_id": "CVE-2019-10358"
+    },
+    {
+      "cpe": "cpe:a:maven-repository-metadata:maven:3.0:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2019-10358",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": false,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "SINGLE",
+              "availability_impact": "NONE",
+              "base_score": 4.0,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 8.0,
+              "impact_score": 2.9,
+              "integrity_impact": "NONE"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:L/Au:S/C:P/I:N/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "NONE",
+              "base_score": 6.5,
+              "base_severity": "Medium",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 2.8,
+              "impact_score": 3.6,
+              "integrity_impact": "NONE",
+              "privileges_required": "LOW",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+            "version": "3.0"
+          },
+          "id": "CVE-2019-10358"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/maven-repository-metadata/3.0/maven-repository-metadata-3.0.jar",
+      "pkg_type": "java",
+      "severity": "Medium",
+      "vendor_data": [],
+      "version": "3.0",
+      "vulnerability_id": "CVE-2019-10358"
+    },
+    {
+      "cpe": "cpe:a:maven-settings-builder:maven:3.0:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2019-10358",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": false,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "SINGLE",
+              "availability_impact": "NONE",
+              "base_score": 4.0,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 8.0,
+              "impact_score": 2.9,
+              "integrity_impact": "NONE"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:L/Au:S/C:P/I:N/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "NONE",
+              "base_score": 6.5,
+              "base_severity": "Medium",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 2.8,
+              "impact_score": 3.6,
+              "integrity_impact": "NONE",
+              "privileges_required": "LOW",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+            "version": "3.0"
+          },
+          "id": "CVE-2019-10358"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/maven-settings-builder/3.0/maven-settings-builder-3.0.jar",
+      "pkg_type": "java",
+      "severity": "Medium",
+      "vendor_data": [],
+      "version": "3.0",
+      "vulnerability_id": "CVE-2019-10358"
+    },
+    {
+      "cpe": "cpe:a:maven-settings:maven:3.0:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2019-10358",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": false,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "SINGLE",
+              "availability_impact": "NONE",
+              "base_score": 4.0,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 8.0,
+              "impact_score": 2.9,
+              "integrity_impact": "NONE"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:L/Au:S/C:P/I:N/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "NONE",
+              "base_score": 6.5,
+              "base_severity": "Medium",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 2.8,
+              "impact_score": 3.6,
+              "integrity_impact": "NONE",
+              "privileges_required": "LOW",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+            "version": "3.0"
+          },
+          "id": "CVE-2019-10358"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/maven-settings/3.0/maven-settings-3.0.jar",
+      "pkg_type": "java",
+      "severity": "Medium",
+      "vendor_data": [],
+      "version": "3.0",
+      "vulnerability_id": "CVE-2019-10358"
+    },
+    {
+      "cpe": "cpe:a:maven-toolchain:maven:1.0:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2020-15777",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": false,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "LOCAL",
+              "authentication": "NONE",
+              "availability_impact": "PARTIAL",
+              "base_score": 4.6,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 3.9,
+              "impact_score": 6.4,
+              "integrity_impact": "PARTIAL"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:L/AC:L/Au:N/C:P/I:P/A:P",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "LOCAL",
+              "availability_impact": "HIGH",
+              "base_score": 7.8,
+              "base_severity": "High",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 1.8,
+              "impact_score": 5.9,
+              "integrity_impact": "HIGH",
+              "privileges_required": "LOW",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+            "version": "3.1"
+          },
+          "id": "CVE-2020-15777"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/maven-toolchain/1.0/maven-toolchain-1.0.jar",
+      "pkg_type": "java",
+      "severity": "High",
+      "vendor_data": [],
+      "version": "1.0",
+      "vulnerability_id": "CVE-2020-15777"
+    },
+    {
+      "cpe": "cpe:a:maven-plugin-annotations:maven:3.1:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2019-10358",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": false,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "SINGLE",
+              "availability_impact": "NONE",
+              "base_score": 4.0,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 8.0,
+              "impact_score": 2.9,
+              "integrity_impact": "NONE"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:L/Au:S/C:P/I:N/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "NONE",
+              "base_score": 6.5,
+              "base_severity": "Medium",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 2.8,
+              "impact_score": 3.6,
+              "integrity_impact": "NONE",
+              "privileges_required": "LOW",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+            "version": "3.0"
+          },
+          "id": "CVE-2019-10358"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/plugin-tools/maven-plugin-annotations/3.1/maven-plugin-annotations-3.1.jar",
+      "pkg_type": "java",
+      "severity": "Medium",
+      "vendor_data": [],
+      "version": "3.1",
+      "vulnerability_id": "CVE-2019-10358"
+    },
+    {
+      "cpe": "cpe:a:maven-clean-plugin:maven:2.5:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2017-1000397",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": null,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "MEDIUM",
+              "access_vector": "NETWORK",
+              "authentication": "NONE",
+              "availability_impact": "NONE",
+              "base_score": 4.3,
+              "confidentiality_impact": "NONE",
+              "exploitability_score": 8.6,
+              "impact_score": 2.9,
+              "integrity_impact": "PARTIAL"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:M/Au:N/C:N/I:P/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "HIGH",
+              "attack_vector": "NETWORK",
+              "availability_impact": "NONE",
+              "base_score": 5.9,
+              "base_severity": "Medium",
+              "confidentiality_impact": "NONE",
+              "exploitability_score": 2.2,
+              "impact_score": 3.6,
+              "integrity_impact": "HIGH",
+              "privileges_required": "NONE",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "version": "3.0"
+          },
+          "id": "CVE-2017-1000397"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/plugins/maven-clean-plugin/2.5/maven-clean-plugin-2.5.jar",
+      "pkg_type": "java",
+      "severity": "Medium",
+      "vendor_data": [],
+      "version": "2.5",
+      "vulnerability_id": "CVE-2017-1000397"
+    },
+    {
+      "cpe": "cpe:a:maven-clean-plugin:maven:2.5:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2019-10358",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": false,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "SINGLE",
+              "availability_impact": "NONE",
+              "base_score": 4.0,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 8.0,
+              "impact_score": 2.9,
+              "integrity_impact": "NONE"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:L/Au:S/C:P/I:N/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "NONE",
+              "base_score": 6.5,
+              "base_severity": "Medium",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 2.8,
+              "impact_score": 3.6,
+              "integrity_impact": "NONE",
+              "privileges_required": "LOW",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+            "version": "3.0"
+          },
+          "id": "CVE-2019-10358"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/plugins/maven-clean-plugin/2.5/maven-clean-plugin-2.5.jar",
+      "pkg_type": "java",
+      "severity": "Medium",
+      "vendor_data": [],
+      "version": "2.5",
+      "vulnerability_id": "CVE-2019-10358"
+    },
+    {
+      "cpe": "cpe:a:maven-compiler-plugin:maven:3.1:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2019-10358",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": false,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "SINGLE",
+              "availability_impact": "NONE",
+              "base_score": 4.0,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 8.0,
+              "impact_score": 2.9,
+              "integrity_impact": "NONE"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:L/Au:S/C:P/I:N/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "NONE",
+              "base_score": 6.5,
+              "base_severity": "Medium",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 2.8,
+              "impact_score": 3.6,
+              "integrity_impact": "NONE",
+              "privileges_required": "LOW",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+            "version": "3.0"
+          },
+          "id": "CVE-2019-10358"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/plugins/maven-compiler-plugin/3.1/maven-compiler-plugin-3.1.jar",
+      "pkg_type": "java",
+      "severity": "Medium",
+      "vendor_data": [],
+      "version": "3.1",
+      "vulnerability_id": "CVE-2019-10358"
+    },
+    {
+      "cpe": "cpe:a:maven-install-plugin:maven:2.4:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2017-1000397",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": null,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "MEDIUM",
+              "access_vector": "NETWORK",
+              "authentication": "NONE",
+              "availability_impact": "NONE",
+              "base_score": 4.3,
+              "confidentiality_impact": "NONE",
+              "exploitability_score": 8.6,
+              "impact_score": 2.9,
+              "integrity_impact": "PARTIAL"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:M/Au:N/C:N/I:P/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "HIGH",
+              "attack_vector": "NETWORK",
+              "availability_impact": "NONE",
+              "base_score": 5.9,
+              "base_severity": "Medium",
+              "confidentiality_impact": "NONE",
+              "exploitability_score": 2.2,
+              "impact_score": 3.6,
+              "integrity_impact": "HIGH",
+              "privileges_required": "NONE",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "version": "3.0"
+          },
+          "id": "CVE-2017-1000397"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/plugins/maven-install-plugin/2.4/maven-install-plugin-2.4.jar",
+      "pkg_type": "java",
+      "severity": "Medium",
+      "vendor_data": [],
+      "version": "2.4",
+      "vulnerability_id": "CVE-2017-1000397"
+    },
+    {
+      "cpe": "cpe:a:maven-install-plugin:maven:2.4:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2019-10358",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": false,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "SINGLE",
+              "availability_impact": "NONE",
+              "base_score": 4.0,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 8.0,
+              "impact_score": 2.9,
+              "integrity_impact": "NONE"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:L/Au:S/C:P/I:N/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "NONE",
+              "base_score": 6.5,
+              "base_severity": "Medium",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 2.8,
+              "impact_score": 3.6,
+              "integrity_impact": "NONE",
+              "privileges_required": "LOW",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+            "version": "3.0"
+          },
+          "id": "CVE-2019-10358"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/plugins/maven-install-plugin/2.4/maven-install-plugin-2.4.jar",
+      "pkg_type": "java",
+      "severity": "Medium",
+      "vendor_data": [],
+      "version": "2.4",
+      "vulnerability_id": "CVE-2019-10358"
+    },
+    {
+      "cpe": "cpe:a:maven-jar-plugin:maven:2.4:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2017-1000397",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": null,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "MEDIUM",
+              "access_vector": "NETWORK",
+              "authentication": "NONE",
+              "availability_impact": "NONE",
+              "base_score": 4.3,
+              "confidentiality_impact": "NONE",
+              "exploitability_score": 8.6,
+              "impact_score": 2.9,
+              "integrity_impact": "PARTIAL"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:M/Au:N/C:N/I:P/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "HIGH",
+              "attack_vector": "NETWORK",
+              "availability_impact": "NONE",
+              "base_score": 5.9,
+              "base_severity": "Medium",
+              "confidentiality_impact": "NONE",
+              "exploitability_score": 2.2,
+              "impact_score": 3.6,
+              "integrity_impact": "HIGH",
+              "privileges_required": "NONE",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "version": "3.0"
+          },
+          "id": "CVE-2017-1000397"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/plugins/maven-jar-plugin/2.4/maven-jar-plugin-2.4.jar",
+      "pkg_type": "java",
+      "severity": "Medium",
+      "vendor_data": [],
+      "version": "2.4",
+      "vulnerability_id": "CVE-2017-1000397"
+    },
+    {
+      "cpe": "cpe:a:maven-jar-plugin:maven:2.4:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2019-10358",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": false,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "SINGLE",
+              "availability_impact": "NONE",
+              "base_score": 4.0,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 8.0,
+              "impact_score": 2.9,
+              "integrity_impact": "NONE"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:L/Au:S/C:P/I:N/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "NONE",
+              "base_score": 6.5,
+              "base_severity": "Medium",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 2.8,
+              "impact_score": 3.6,
+              "integrity_impact": "NONE",
+              "privileges_required": "LOW",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+            "version": "3.0"
+          },
+          "id": "CVE-2019-10358"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/plugins/maven-jar-plugin/2.4/maven-jar-plugin-2.4.jar",
+      "pkg_type": "java",
+      "severity": "Medium",
+      "vendor_data": [],
+      "version": "2.4",
+      "vulnerability_id": "CVE-2019-10358"
+    },
+    {
+      "cpe": "cpe:a:maven-resources-plugin:maven:2.6:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2017-1000397",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": null,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "MEDIUM",
+              "access_vector": "NETWORK",
+              "authentication": "NONE",
+              "availability_impact": "NONE",
+              "base_score": 4.3,
+              "confidentiality_impact": "NONE",
+              "exploitability_score": 8.6,
+              "impact_score": 2.9,
+              "integrity_impact": "PARTIAL"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:M/Au:N/C:N/I:P/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "HIGH",
+              "attack_vector": "NETWORK",
+              "availability_impact": "NONE",
+              "base_score": 5.9,
+              "base_severity": "Medium",
+              "confidentiality_impact": "NONE",
+              "exploitability_score": 2.2,
+              "impact_score": 3.6,
+              "integrity_impact": "HIGH",
+              "privileges_required": "NONE",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "version": "3.0"
+          },
+          "id": "CVE-2017-1000397"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/plugins/maven-resources-plugin/2.6/maven-resources-plugin-2.6.jar",
+      "pkg_type": "java",
+      "severity": "Medium",
+      "vendor_data": [],
+      "version": "2.6",
+      "vulnerability_id": "CVE-2017-1000397"
+    },
+    {
+      "cpe": "cpe:a:maven-resources-plugin:maven:2.6:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2019-10358",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": false,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "SINGLE",
+              "availability_impact": "NONE",
+              "base_score": 4.0,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 8.0,
+              "impact_score": 2.9,
+              "integrity_impact": "NONE"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:L/Au:S/C:P/I:N/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "NONE",
+              "base_score": 6.5,
+              "base_severity": "Medium",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 2.8,
+              "impact_score": 3.6,
+              "integrity_impact": "NONE",
+              "privileges_required": "LOW",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+            "version": "3.0"
+          },
+          "id": "CVE-2019-10358"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/plugins/maven-resources-plugin/2.6/maven-resources-plugin-2.6.jar",
+      "pkg_type": "java",
+      "severity": "Medium",
+      "vendor_data": [],
+      "version": "2.6",
+      "vulnerability_id": "CVE-2019-10358"
+    },
+    {
+      "cpe": "cpe:a:maven-common-artifact-filters:maven:1.3:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2020-15777",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": false,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "LOCAL",
+              "authentication": "NONE",
+              "availability_impact": "PARTIAL",
+              "base_score": 4.6,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 3.9,
+              "impact_score": 6.4,
+              "integrity_impact": "PARTIAL"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:L/AC:L/Au:N/C:P/I:P/A:P",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "LOCAL",
+              "availability_impact": "HIGH",
+              "base_score": 7.8,
+              "base_severity": "High",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 1.8,
+              "impact_score": 5.9,
+              "integrity_impact": "HIGH",
+              "privileges_required": "LOW",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+            "version": "3.1"
+          },
+          "id": "CVE-2020-15777"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/shared/maven-common-artifact-filters/1.3/maven-common-artifact-filters-1.3.jar",
+      "pkg_type": "java",
+      "severity": "High",
+      "vendor_data": [],
+      "version": "1.3",
+      "vulnerability_id": "CVE-2020-15777"
+    },
+    {
+      "cpe": "cpe:a:maven-filtering:maven:1.1:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2020-15777",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": false,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "LOCAL",
+              "authentication": "NONE",
+              "availability_impact": "PARTIAL",
+              "base_score": 4.6,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 3.9,
+              "impact_score": 6.4,
+              "integrity_impact": "PARTIAL"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:L/AC:L/Au:N/C:P/I:P/A:P",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "LOCAL",
+              "availability_impact": "HIGH",
+              "base_score": 7.8,
+              "base_severity": "High",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 1.8,
+              "impact_score": 5.9,
+              "integrity_impact": "HIGH",
+              "privileges_required": "LOW",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+            "version": "3.1"
+          },
+          "id": "CVE-2020-15777"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/shared/maven-filtering/1.1/maven-filtering-1.1.jar",
+      "pkg_type": "java",
+      "severity": "High",
+      "vendor_data": [],
+      "version": "1.1",
+      "vulnerability_id": "CVE-2020-15777"
+    },
+    {
+      "cpe": "cpe:a:maven-shared-incremental:maven:1.1:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2020-15777",
+      "name": "maven",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": false,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "LOCAL",
+              "authentication": "NONE",
+              "availability_impact": "PARTIAL",
+              "base_score": 4.6,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 3.9,
+              "impact_score": 6.4,
+              "integrity_impact": "PARTIAL"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:L/AC:L/Au:N/C:P/I:P/A:P",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "LOCAL",
+              "availability_impact": "HIGH",
+              "base_score": 7.8,
+              "base_severity": "High",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 1.8,
+              "impact_score": 5.9,
+              "integrity_impact": "HIGH",
+              "privileges_required": "LOW",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+            "version": "3.1"
+          },
+          "id": "CVE-2020-15777"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/shared/maven-shared-incremental/1.1/maven-shared-incremental-1.1.jar",
+      "pkg_type": "java",
+      "severity": "High",
+      "vendor_data": [],
+      "version": "1.1",
+      "vulnerability_id": "CVE-2020-15777"
+    },
+    {
+      "cpe": "cpe:a:plexus-utils:plexus-utils:3.0.8:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2017-1000487",
+      "name": "plexus-utils",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": true,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "NONE",
+              "availability_impact": "PARTIAL",
+              "base_score": 7.5,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 10.0,
+              "impact_score": 6.4,
+              "integrity_impact": "PARTIAL"
+            },
+            "severity": "High",
+            "vector_string": "AV:N/AC:L/Au:N/C:P/I:P/A:P",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "HIGH",
+              "base_score": 9.8,
+              "base_severity": "Critical",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 3.9,
+              "impact_score": 5.9,
+              "integrity_impact": "HIGH",
+              "privileges_required": "NONE",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "version": "3.1"
+          },
+          "id": "CVE-2017-1000487"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/surefire/maven-surefire-common/2.12.4/maven-surefire-common-2.12.4.jar:plexus-utils",
+      "pkg_type": "java",
+      "severity": "Critical",
+      "vendor_data": [],
+      "version": "3.0.8",
+      "vulnerability_id": "CVE-2017-1000487"
+    },
+    {
+      "cpe": "cpe:a:plexus-utils:plexus-utils:3.0.8:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2017-1000487",
+      "name": "plexus-utils",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": true,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "NONE",
+              "availability_impact": "PARTIAL",
+              "base_score": 7.5,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 10.0,
+              "impact_score": 6.4,
+              "integrity_impact": "PARTIAL"
+            },
+            "severity": "High",
+            "vector_string": "AV:N/AC:L/Au:N/C:P/I:P/A:P",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "HIGH",
+              "base_score": 9.8,
+              "base_severity": "Critical",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 3.9,
+              "impact_score": 5.9,
+              "integrity_impact": "HIGH",
+              "privileges_required": "NONE",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "version": "3.1"
+          },
+          "id": "CVE-2017-1000487"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/apache/maven/surefire/surefire-api/2.12.4/surefire-api-2.12.4.jar:plexus-utils",
+      "pkg_type": "java",
+      "severity": "Critical",
+      "vendor_data": [],
+      "version": "3.0.8",
+      "vulnerability_id": "CVE-2017-1000487"
+    },
+    {
+      "cpe": "cpe:a:plexus-archiver:plexus-archiver:2.1:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2018-1002200",
+      "name": "plexus-archiver",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": null,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": true
+            },
+            "base_metrics": {
+              "access_complexity": "MEDIUM",
+              "access_vector": "NETWORK",
+              "authentication": "NONE",
+              "availability_impact": "NONE",
+              "base_score": 4.3,
+              "confidentiality_impact": "NONE",
+              "exploitability_score": 8.6,
+              "impact_score": 2.9,
+              "integrity_impact": "PARTIAL"
+            },
+            "severity": "Medium",
+            "vector_string": "AV:N/AC:M/Au:N/C:N/I:P/A:N",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "LOCAL",
+              "availability_impact": "NONE",
+              "base_score": 5.5,
+              "base_severity": "Medium",
+              "confidentiality_impact": "NONE",
+              "exploitability_score": 1.8,
+              "impact_score": 3.6,
+              "integrity_impact": "HIGH",
+              "privileges_required": "NONE",
+              "scope": "UNCHANGED",
+              "user_interaction": "REQUIRED"
+            },
+            "vector_string": "CVSS:3.0/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:H/A:N",
+            "version": "3.0"
+          },
+          "id": "CVE-2018-1002200"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/codehaus/plexus/plexus-archiver/2.1/plexus-archiver-2.1.jar",
+      "pkg_type": "java",
+      "severity": "Medium",
+      "vendor_data": [],
+      "version": "2.1",
+      "vulnerability_id": "CVE-2018-1002200"
+    },
+    {
+      "cpe": "cpe:a:plexus-utils:plexus-utils:1.5.1:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2017-1000487",
+      "name": "plexus-utils",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": true,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "NONE",
+              "availability_impact": "PARTIAL",
+              "base_score": 7.5,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 10.0,
+              "impact_score": 6.4,
+              "integrity_impact": "PARTIAL"
+            },
+            "severity": "High",
+            "vector_string": "AV:N/AC:L/Au:N/C:P/I:P/A:P",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "HIGH",
+              "base_score": 9.8,
+              "base_severity": "Critical",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 3.9,
+              "impact_score": 5.9,
+              "integrity_impact": "HIGH",
+              "privileges_required": "NONE",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "version": "3.1"
+          },
+          "id": "CVE-2017-1000487"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/codehaus/plexus/plexus-utils/1.5.1/plexus-utils-1.5.1.jar",
+      "pkg_type": "java",
+      "severity": "Critical",
+      "vendor_data": [],
+      "version": "1.5.1",
+      "vulnerability_id": "CVE-2017-1000487"
+    },
+    {
+      "cpe": "cpe:a:plexus-utils:plexus-utils:2.0.5:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2017-1000487",
+      "name": "plexus-utils",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": true,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "NONE",
+              "availability_impact": "PARTIAL",
+              "base_score": 7.5,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 10.0,
+              "impact_score": 6.4,
+              "integrity_impact": "PARTIAL"
+            },
+            "severity": "High",
+            "vector_string": "AV:N/AC:L/Au:N/C:P/I:P/A:P",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "HIGH",
+              "base_score": 9.8,
+              "base_severity": "Critical",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 3.9,
+              "impact_score": 5.9,
+              "integrity_impact": "HIGH",
+              "privileges_required": "NONE",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "version": "3.1"
+          },
+          "id": "CVE-2017-1000487"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/codehaus/plexus/plexus-utils/2.0.5/plexus-utils-2.0.5.jar",
+      "pkg_type": "java",
+      "severity": "Critical",
+      "vendor_data": [],
+      "version": "2.0.5",
+      "vulnerability_id": "CVE-2017-1000487"
+    },
+    {
+      "cpe": "cpe:a:plexus-utils:plexus-utils:3.0.5:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2017-1000487",
+      "name": "plexus-utils",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": true,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "NONE",
+              "availability_impact": "PARTIAL",
+              "base_score": 7.5,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 10.0,
+              "impact_score": 6.4,
+              "integrity_impact": "PARTIAL"
+            },
+            "severity": "High",
+            "vector_string": "AV:N/AC:L/Au:N/C:P/I:P/A:P",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "HIGH",
+              "base_score": 9.8,
+              "base_severity": "Critical",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 3.9,
+              "impact_score": 5.9,
+              "integrity_impact": "HIGH",
+              "privileges_required": "NONE",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "version": "3.1"
+          },
+          "id": "CVE-2017-1000487"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/codehaus/plexus/plexus-utils/3.0.5/plexus-utils-3.0.5.jar",
+      "pkg_type": "java",
+      "severity": "Critical",
+      "vendor_data": [],
+      "version": "3.0.5",
+      "vulnerability_id": "CVE-2017-1000487"
+    },
+    {
+      "cpe": "cpe:a:plexus-utils:plexus-utils:3.0.8:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2017-1000487",
+      "name": "plexus-utils",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": true,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "NONE",
+              "availability_impact": "PARTIAL",
+              "base_score": 7.5,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 10.0,
+              "impact_score": 6.4,
+              "integrity_impact": "PARTIAL"
+            },
+            "severity": "High",
+            "vector_string": "AV:N/AC:L/Au:N/C:P/I:P/A:P",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "HIGH",
+              "base_score": 9.8,
+              "base_severity": "Critical",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 3.9,
+              "impact_score": 5.9,
+              "integrity_impact": "HIGH",
+              "privileges_required": "NONE",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "version": "3.1"
+          },
+          "id": "CVE-2017-1000487"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/codehaus/plexus/plexus-utils/3.0.8/plexus-utils-3.0.8.jar",
+      "pkg_type": "java",
+      "severity": "Critical",
+      "vendor_data": [],
+      "version": "3.0.8",
+      "vulnerability_id": "CVE-2017-1000487"
+    },
+    {
+      "cpe": "cpe:a:plexus-utils:plexus-utils:3.0:*:*",
+      "cpe23": null,
+      "feed_name": "nvdv2",
+      "feed_namespace": "nvdv2:cves",
+      "fixed_in": [],
+      "link": "https://nvd.nist.gov/vuln/detail/CVE-2017-1000487",
+      "name": "plexus-utils",
+      "nvd_data": [
+        {
+          "cvss_v2": {
+            "additional_information": {
+              "ac_insuf_info": true,
+              "obtain_all_privilege": false,
+              "obtain_other_privilege": false,
+              "obtain_user_privilege": false,
+              "user_interaction_required": false
+            },
+            "base_metrics": {
+              "access_complexity": "LOW",
+              "access_vector": "NETWORK",
+              "authentication": "NONE",
+              "availability_impact": "PARTIAL",
+              "base_score": 7.5,
+              "confidentiality_impact": "PARTIAL",
+              "exploitability_score": 10.0,
+              "impact_score": 6.4,
+              "integrity_impact": "PARTIAL"
+            },
+            "severity": "High",
+            "vector_string": "AV:N/AC:L/Au:N/C:P/I:P/A:P",
+            "version": "2.0"
+          },
+          "cvss_v3": {
+            "base_metrics": {
+              "attack_complexity": "LOW",
+              "attack_vector": "NETWORK",
+              "availability_impact": "HIGH",
+              "base_score": 9.8,
+              "base_severity": "Critical",
+              "confidentiality_impact": "HIGH",
+              "exploitability_score": 3.9,
+              "impact_score": 5.9,
+              "integrity_impact": "HIGH",
+              "privileges_required": "NONE",
+              "scope": "UNCHANGED",
+              "user_interaction": "NONE"
+            },
+            "vector_string": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "version": "3.1"
+          },
+          "id": "CVE-2017-1000487"
+        }
+      ],
+      "pkg_path": "/root/.m2/repository/org/codehaus/plexus/plexus-utils/3.0/plexus-utils-3.0.jar",
+      "pkg_type": "java",
+      "severity": "Critical",
+      "vendor_data": [],
+      "version": "3.0",
+      "vulnerability_id": "CVE-2017-1000487"
+    }
+  ],
+  "image_id": "b841a7f018de8bb3aaffddb4d6348485e61c79d15ec76c68cd82109f9ce384a2",
+  "legacy_report": {
+    "multi": {
+      "result": {
+        "colcount": 15,
+        "header": [
+          "CVE_ID",
+          "Severity",
+          "*Total_Affected",
+          "Vulnerable_Package",
+          "Fix_Available",
+          "Fix_Images",
+          "Rebuild_Images",
+          "URL",
+          "Package_Type",
+          "Feed",
+          "Feed_Group",
+          "Package_Name",
+          "Package_Path",
+          "Package_Version",
+          "CVES"
+        ],
+        "rowcount": 0,
+        "rows": []
+      },
+      "url_column_index": 7,
+      "warns": []
+    }
+  },
+  "user_id": "admin"
+}
