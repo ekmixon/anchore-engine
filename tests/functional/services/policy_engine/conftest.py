@@ -8,12 +8,10 @@ import jsonschema
 import pytest
 
 from anchore_engine.db import session_scope
-from anchore_engine.db.entities.common import (do_disconnect, end_session,
-                                               initialize)
+from anchore_engine.db.entities.common import do_disconnect, end_session, initialize
 from anchore_engine.db.entities.policy_engine import Vulnerability
 from tests.functional.services.catalog.utils import catalog_api
-from tests.functional.services.catalog.utils.utils import \
-    add_or_replace_document
+from tests.functional.services.catalog.utils.utils import add_or_replace_document
 from tests.functional.services.policy_engine.utils import images_api
 from tests.functional.services.utils import http_utils
 
@@ -44,8 +42,8 @@ ANALYSIS_FILES = [
     ),
     AnalysisFile(
         "alpine-test.json",
-        "sha256:6a05b0ba5f0874b66749628e38f9c2a37ed76c4a4388171d79e0ffe012b90509"
-    )
+        "sha256:6a05b0ba5f0874b66749628e38f9c2a37ed76c4a4388171d79e0ffe012b90509",
+    ),
 ]
 
 IMAGE_DIGEST_ID_MAP: Dict[str, str] = {}
@@ -228,21 +226,26 @@ def ingress_jsonschema() -> jsonschema.Draft7Validator:
     return SchemaResolver().get_validator("ingress_vulnerability_report.schema.json")
 
 
-@pytest.fixture()
-def set_env_var(monkeypatch):
-    monkeypatch.setenv("ANCHORE_TEST_DB_URL", "postgresql://postgres:mysecretpassword@localhost:5432/postgres")
+@pytest.fixture(scope="session")
+def set_env_vars(monkeysession):
+    monkeysession.setenv(
+        "ANCHORE_TEST_DB_URL",
+        "postgresql://postgres:mysecretpassword@localhost:5432/postgres",
+    )
 
 
-@pytest.fixture
-def anchore_db(connection_str=None, do_echo=False):
+@pytest.fixture(scope="session")
+def anchore_db():
     """
     Sets up a db connection to an existing db, and fails if not found/present
+    Different from the fixture in test/fixtures.py in that it does not drop existing data upon making a connection
     :return:
     """
 
-    conn_str = connection_str if connection_str else os.getenv("ANCHORE_TEST_DB_URL")
+    conn_str = os.getenv("ANCHORE_TEST_DB_URL")
+    assert conn_str
 
-    config = {"credentials": {"database": {"db_connect": conn_str, "db_echo": do_echo}}}
+    config = {"credentials": {"database": {"db_connect": conn_str}}}
 
     try:
         ret = initialize(localconfig=config)
@@ -254,8 +257,5 @@ def anchore_db(connection_str=None, do_echo=False):
 
 
 @pytest.fixture(scope="session")
-def insert(set_env_var, anchore_db):
-    with session_scope() as db:
-        vuln = Vulnerability(id="zan-vijay", namespace_name="centos", severity="Low")
-        db.add(vuln)
-        db.flush()
+def insert(set_env_vars, anchore_db):
+    pass
