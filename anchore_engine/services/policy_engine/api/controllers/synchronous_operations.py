@@ -1073,6 +1073,11 @@ def ingress_image(ingress_request):
             # We're doing a sync call above, so just send loaded. It should be 'accepted' once async works.
             resp.status = "loaded"
         resp.vulnerability_report = get_image_vulnerabilities(req.user_id, req.image_id)
+        log.info(f"{resp.vulnerability_report}")
+        vuln_report = resp.vulnerability_report[0]
+        log.info(f"{vuln_report.keys()}")
+        if "httpcode" in vuln_report:
+            raise Exception(vuln_report["message"])
         return resp.to_json(), 200
     except Exception as e:
         log.exception("Error loading image into policy engine")

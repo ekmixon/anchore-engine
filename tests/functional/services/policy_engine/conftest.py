@@ -9,7 +9,13 @@ import pytest
 
 from anchore_engine.db import session_scope
 from anchore_engine.db.entities.common import do_disconnect, end_session, initialize
-from anchore_engine.db.entities.policy_engine import Vulnerability
+from anchore_engine.db.entities.policy_engine import (
+    Vulnerability,
+    NvdV2Metadata,
+    CpeV2Vulnerability,
+    FixedArtifact,
+)
+
 from tests.functional.services.catalog.utils import catalog_api
 from tests.functional.services.catalog.utils.utils import add_or_replace_document
 from tests.functional.services.policy_engine.utils import images_api
@@ -42,7 +48,7 @@ ANALYSIS_FILES = [
     ),
     AnalysisFile(
         "alpine-test.json",
-        "sha256:6a05b0ba5f0874b66749628e38f9c2a37ed76c4a4388171d79e0ffe012b90509",
+        "sha256:5cdf314fac24ae12210a2cf085f44ae58a3d2c1cb751151eead6f70be9d591ed",
     ),
 ]
 
@@ -255,7 +261,73 @@ def anchore_db():
         end_session()
         do_disconnect()
 
+# @pytest.fixture(scope="session")
+# def anchore_db(connection_str=None, do_echo=False):
+#     """
+#     Sets up a db connection to an existing db, and fails if not found/present
+#     :return:
+#     """
+#
+#     from anchore_engine.db.entities.common import (
+#         get_engine,
+#         initialize,
+#         do_disconnect,
+#         init_thread_session,
+#         end_session,
+#     )
+#     from anchore_engine.db.entities.upgrade import do_create_tables
+#
+#     conn_str = connection_str if connection_str else os.getenv("ANCHORE_TEST_DB_URL")
+#
+#     config = {"credentials": {"database": {"db_connect": conn_str, "db_echo": do_echo}}}
+#
+#     try:
+#         # logger.info("Initializing connection: {}".format(config))
+#         ret = initialize(localconfig=config)
+#         init_thread_session(force_new=True)
+#
+#         engine = get_engine()
+#         # logger.info("Dropping db if found")
+#         engine.execute("DROP SCHEMA public CASCADE")
+#         engine.execute("CREATE SCHEMA public")
+#         engine.execute("GRANT ALL ON SCHEMA public TO postgres")
+#         engine.execute("GRANT ALL ON SCHEMA public TO public")
+#
+#         # Now ready for anchore init (tables etc)
+#         # logger.info("Creating tables")
+#         do_create_tables()
+#
+#         yield ret
+#     finally:
+#         # logger.info("Cleaning up/disconnect")
+#         end_session()
+#         do_disconnect()
+
+
+SEED_FILE_DIR = path.join(CURRENT_DIR, "database_seed_files")
+
+SEED_FILE_TO_DB_TABLE_MAP = {
+    "feed_data_vulnerabilities.json": Vulnerability,
+    "feed_data_vulnerabilities_fixed_artifacts.json": FixedArtifact,
+    "feed_data_nvdv2_vulnerabilities.json": NvdV2Metadata,
+    "feed_data_cpev2_vulnerabilities.json": CpeV2Vulnerability,
+}
+
+
+def load_seed_file_rows(file_name: str):
+    json_file = os.path.join(SEED_FILE_DIR, file_name)
+    with open(json_file, "rb") as f:
+        for line in f:
+            linetext = line.decode("unicode-escape").strip()
+            yield json.loads(linetext)
+
 
 @pytest.fixture(scope="session")
 def insert(set_env_vars, anchore_db):
-    pass
+    with session_scope() as db:
+        all_records = []
+        for seed_file_name, entry_cls in SEED_FILE_TO_DB_TABLE_MAP.items():
+            for db_entry in load_seed_file_rows(seed_file_name):
+                all_records.append(entry_cls(**db_entry))
+        db.bulk_save_objects(all_records)
+        db.commit()
