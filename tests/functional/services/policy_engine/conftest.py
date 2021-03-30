@@ -3,7 +3,7 @@ import os
 from dataclasses import dataclass
 from datetime import datetime
 from os import path
-from typing import Callable, Dict
+from typing import Callable, ContextManager, Dict, Generator, Sequence
 
 import jsonschema
 import pytest
@@ -26,6 +26,7 @@ CURRENT_DIR = path.dirname(path.abspath(__file__))
 ANALYSIS_FILES_DIR = path.join(CURRENT_DIR, "analysis_files")
 VULN_OUTPUT_DIR = path.join(CURRENT_DIR, "expected_output")
 SCHEMA_FILE_DIR = path.join(CURRENT_DIR, "schema_files")
+SEED_FILE_DIR = path.join(CURRENT_DIR, "database_seed_files")
 
 
 @dataclass
@@ -34,7 +35,7 @@ class AnalysisFile:
     image_digest: str
 
 
-ANALYSIS_FILES = [
+ANALYSIS_FILES: Sequence[AnalysisFile] = [
     AnalysisFile(
         "alpine-test.json",
         "sha256:5cdf314fac24ae12210a2cf085f44ae58a3d2c1cb751151eead6f70be9d591ed",
@@ -221,8 +222,24 @@ def ingress_jsonschema() -> jsonschema.Draft7Validator:
     return SchemaResolver().get_validator("ingress_vulnerability_report.schema.json")
 
 
+SEED_FILE_TO_DB_TABLE_MAP: Dict[str, Callable] = {
+    "feed_data_vulnerabilities.json": Vulnerability,
+    "feed_data_vulnerabilities_fixed_artifacts.json": FixedArtifact,
+    "feed_data_nvdv2_vulnerabilities.json": NvdV2Metadata,
+    "feed_data_cpev2_vulnerabilities.json": CpeV2Vulnerability,
+}
+
+SEED_FILE_TO_METADATA_MAP: Dict[str, str] = {
+    "feed_data_vulnerabilities.json": "metadata_json",
+    "feed_data_vulnerabilities_fixed_artifacts.json": "fix_metadata",
+}
+
+
 @pytest.fixture(scope="session")
-def set_env_vars(monkeysession):
+def set_env_vars(monkeysession) -> None:
+    """
+    Setup environment variables for database connection.
+    """
     monkeysession.setenv(
         "ANCHORE_TEST_DB_URL",
         "postgresql://postgres:mysecretpassword@localhost:5432/postgres",
@@ -230,11 +247,12 @@ def set_env_vars(monkeysession):
 
 
 @pytest.fixture(scope="session")
-def anchore_db():
+def anchore_db() -> ContextManager[bool]:
     """
     Sets up a db connection to an existing db, and fails if not found/present
     Different from the fixture in test/fixtures.py in that it does not drop existing data upon making a connection
-    :return:
+    :return: True after connection setup (not actual connection object).
+    :rtype: ContextManager[bool]
     """
 
     conn_str = os.getenv("ANCHORE_TEST_DB_URL")
@@ -244,29 +262,20 @@ def anchore_db():
 
     try:
         ret = initialize(localconfig=config)
-
         yield ret
     finally:
         end_session()
         do_disconnect()
 
 
-SEED_FILE_DIR = path.join(CURRENT_DIR, "database_seed_files")
-
-SEED_FILE_TO_DB_TABLE_MAP = {
-    "feed_data_vulnerabilities.json": Vulnerability,
-    "feed_data_vulnerabilities_fixed_artifacts.json": FixedArtifact,
-    "feed_data_nvdv2_vulnerabilities.json": NvdV2Metadata,
-    "feed_data_cpev2_vulnerabilities.json": CpeV2Vulnerability,
-}
-
-SEED_FILE_TO_METADATA_MAP = {
-    "feed_data_vulnerabilities.json": "metadata_json",
-    "feed_data_vulnerabilities_fixed_artifacts.json": "fix_metadata",
-}
-
-
-def load_seed_file_rows(file_name: str):
+def load_seed_file_rows(file_name: str) -> Generator[Dict, None, None]:
+    """
+    Loads database seed files (json lines) and yields the json objects.
+    :param file_name: name of seed file to load
+    :type file_name: str
+    :return: generator yields json
+    :rtype: Generator[Dict, None, None]
+    """
     json_file = os.path.join(SEED_FILE_DIR, file_name)
     with open(json_file, "rb") as f:
         for line in f:
@@ -281,7 +290,10 @@ def load_seed_file_rows(file_name: str):
 
 # TODO enhance to support bulk functionality while handling uniqueness constraints
 @pytest.fixture(scope="session", autouse=True)
-def setup_vuln_data(set_env_vars, anchore_db):
+def setup_vuln_data(set_env_vars, anchore_db) -> None:
+    """
+    Writes database seed file content to database. This allows us to ensure consistent vulnerability results (regardless of feed sync status).
+    """
     with session_scope() as db:
         # set up vulnerability data
         for seed_file_name, entry_cls in SEED_FILE_TO_DB_TABLE_MAP.items():
