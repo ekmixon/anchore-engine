@@ -40,6 +40,10 @@ ANALYSIS_FILES: Sequence[AnalysisFile] = [
         "alpine-test.json",
         "sha256:5cdf314fac24ae12210a2cf085f44ae58a3d2c1cb751151eead6f70be9d591ed",
     ),
+    AnalysisFile(
+        "debian-10-8.json",
+        "sha256:5140fda11677dabf76cd1b83217e9929303555e112afd6a226f24caaf512c6ee",
+    ),
 ]
 
 IMAGE_DIGEST_ID_MAP: Dict[str, str] = {}
