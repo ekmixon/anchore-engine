@@ -244,10 +244,11 @@ def set_env_vars(monkeysession) -> None:
     """
     Setup environment variables for database connection.
     """
-    monkeysession.setenv(
-        "ANCHORE_TEST_DB_URL",
-        "postgresql://postgres:mysecretpassword@localhost:5432/postgres",
-    )
+    if not os.getenv("ANCHORE_TEST_DB_URL"):
+        monkeysession.setenv(
+            "ANCHORE_TEST_DB_URL",
+            "postgresql://postgres:postgres@localhost:5432/postgres",
+        )
 
 
 @pytest.fixture(scope="session")
