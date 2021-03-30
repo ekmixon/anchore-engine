@@ -3,11 +3,14 @@ import os
 from dataclasses import dataclass
 from os import path
 from typing import Callable, Dict
+from datetime import datetime
+
 
 import jsonschema
 import pytest
 import logging
-import psycopg2
+from sqlalchemy import exc
+
 
 from anchore_engine.db import session_scope
 from anchore_engine.db.entities.common import do_disconnect, end_session, initialize
@@ -16,6 +19,7 @@ from anchore_engine.db.entities.policy_engine import (
     NvdV2Metadata,
     CpeV2Vulnerability,
     FixedArtifact,
+    FeedMetadata,
 )
 
 from tests.functional.services.catalog.utils import catalog_api
@@ -263,6 +267,7 @@ def anchore_db():
         end_session()
         do_disconnect()
 
+
 # @pytest.fixture(scope="session")
 # def anchore_db(connection_str=None, do_echo=False):
 #     """
@@ -317,8 +322,9 @@ SEED_FILE_TO_DB_TABLE_MAP = {
 
 SEED_FILE_TO_METADATA_MAP = {
     "feed_data_vulnerabilities.json": "metadata_json",
-    "feed_data_vulnerabilities_fixed_artifacts.json": "fix_metadata"
+    "feed_data_vulnerabilities_fixed_artifacts.json": "fix_metadata",
 }
+
 
 def load_seed_file_rows(file_name: str):
     json_file = os.path.join(SEED_FILE_DIR, file_name)
@@ -333,16 +339,31 @@ def load_seed_file_rows(file_name: str):
             yield json_content
 
 
-@pytest.fixture(scope="session")
-def insert(set_env_vars, anchore_db):
+# TODO enhance to support bulk functionality while handling uniquness constraints
+@pytest.fixture(scope="session", autouse=True)
+def setup_vuln_data(set_env_vars, anchore_db):
     with session_scope() as db:
-        all_records = []
+        # set up vulnerability data
         for seed_file_name, entry_cls in SEED_FILE_TO_DB_TABLE_MAP.items():
             for db_entry in load_seed_file_rows(seed_file_name):
-                # try:
-                #     db.add(entry_cls(**db_entry))
-                # except psycopg2.errors.UniqueViolation:
-                #     pass
-                all_records.append(entry_cls(**db_entry))
-        db.bulk_save_objects(all_records)
-        db.commit()
+                try:
+                    db.add(entry_cls(**db_entry))
+                    db.commit()
+                except exc.IntegrityError:
+                    db.rollback()
+
+        # set up nvdv2 feed in order to use nvdv2 and cpev2 data
+        try:
+            fmd = FeedMetadata(
+                name="nvdv2",
+                description="Feed record for type nvdv2",
+                last_full_sync=datetime.now(),
+                access_tier=0,
+                enabled=True,
+            )
+            db.add(fmd)
+            db.commit()
+        except exc.IntegrityError:
+            db.rollback()
+
+        db.flush()
