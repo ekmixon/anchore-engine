@@ -1064,7 +1064,6 @@ def ingress_image(ingress_request):
             content_conn_timeout=conn_timeout,
             content_read_timeout=read_timeout,
         )
-        t.execute()
         result = t.execute()
         resp = ImageIngressResponse()
         if not result:
