@@ -8,17 +8,17 @@ from typing import Callable, ContextManager, Dict, Generator, Sequence
 import jsonschema
 import pytest
 from anchore_engine.db import session_scope
-from anchore_engine.db.entities.common import do_disconnect, end_session, initialize
-from anchore_engine.db.entities.policy_engine import (
-    CpeV2Vulnerability,
-    FeedMetadata,
-    FixedArtifact,
-    NvdV2Metadata,
-    Vulnerability,
-)
+from anchore_engine.db.entities.common import (do_disconnect, end_session,
+                                               initialize)
+from anchore_engine.db.entities.policy_engine import (CpeV2Vulnerability,
+                                                      FeedMetadata,
+                                                      FixedArtifact,
+                                                      NvdV2Metadata,
+                                                      Vulnerability)
 from sqlalchemy import exc
 from tests.functional.services.catalog.utils import catalog_api
-from tests.functional.services.catalog.utils.utils import add_or_replace_document
+from tests.functional.services.catalog.utils.utils import \
+    add_or_replace_document
 from tests.functional.services.policy_engine.utils import images_api
 from tests.functional.services.utils import http_utils
 
@@ -41,9 +41,13 @@ ANALYSIS_FILES: Sequence[AnalysisFile] = [
         "sha256:5cdf314fac24ae12210a2cf085f44ae58a3d2c1cb751151eead6f70be9d591ed",
     ),
     AnalysisFile(
-        "debian-10-8.json",
+        "debian-test.json",
         "sha256:5140fda11677dabf76cd1b83217e9929303555e112afd6a226f24caaf512c6ee",
     ),
+    AnalysisFile(
+        "centos-test.json",
+        "sha256:928128fdd067241c08161389d593db2efb1509fe95e6cb65be169518139a075d"
+    )
 ]
 
 IMAGE_DIGEST_ID_MAP: Dict[str, str] = {}
