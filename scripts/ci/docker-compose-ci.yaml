@@ -27,6 +27,7 @@ services:
       ANCHORE_CLI_URL: http://engine-api:8228/v1
       ANCHORE_CLI_USER: admin
       ANCHORE_CLI_PASS: foobar
+      ANCHORE_TEST_DB_URL: postgresql://postgres:mysecretpassword@anchore-db:5432/postgres
     working_dir: /job-workspace
     volumes:
       - ../../:/job-workspace
