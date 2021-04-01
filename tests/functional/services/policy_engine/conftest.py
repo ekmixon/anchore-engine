@@ -1,14 +1,19 @@
 import json
 import os
 from dataclasses import dataclass
-from datetime import datetime
 from os import path
 from typing import Callable, ContextManager, Dict, Generator, Sequence
 
 import jsonschema
 import pytest
+
 from anchore_engine.db import session_scope
-from anchore_engine.db.entities.common import do_disconnect, end_session, initialize
+from anchore_engine.db.entities.common import (
+    do_disconnect,
+    end_session,
+    get_engine,
+    initialize,
+)
 from anchore_engine.db.entities.policy_engine import (
     CpeV2Vulnerability,
     FeedMetadata,
@@ -16,7 +21,7 @@ from anchore_engine.db.entities.policy_engine import (
     NvdV2Metadata,
     Vulnerability,
 )
-from sqlalchemy import exc
+from anchore_engine.db.entities.upgrade import do_create_tables
 from tests.functional.services.catalog.utils import catalog_api
 from tests.functional.services.catalog.utils.utils import add_or_replace_document
 from tests.functional.services.policy_engine.utils import images_api
@@ -235,6 +240,7 @@ SEED_FILE_TO_DB_TABLE_MAP: Dict[str, Callable] = {
     "feed_data_vulnerabilities_fixed_artifacts.json": FixedArtifact,
     "feed_data_nvdv2_vulnerabilities.json": NvdV2Metadata,
     "feed_data_cpev2_vulnerabilities.json": CpeV2Vulnerability,
+    "feeds.json": FeedMetadata,
 }
 
 SEED_FILE_TO_METADATA_MAP: Dict[str, str] = {
@@ -255,7 +261,7 @@ def set_env_vars(monkeysession) -> None:
         )
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def anchore_db() -> ContextManager[bool]:
     """
     Sets up a db connection to an existing db, and fails if not found/present
@@ -271,10 +277,22 @@ def anchore_db() -> ContextManager[bool]:
 
     try:
         ret = initialize(localconfig=config)
+        engine = get_engine()
+
+        drop_vuln_data(engine)
+
         yield ret
     finally:
         end_session()
         do_disconnect()
+
+
+def drop_vuln_data(engine):
+    tablenames = [cls.__tablename__ for cls in SEED_FILE_TO_DB_TABLE_MAP.values()]
+    tablenames = ", ".join(map(str, tablenames))
+
+    engine.execute(f"DROP TABLE {tablenames} CASCADE")
+    do_create_tables()
 
 
 def load_seed_file_rows(file_name: str) -> Generator[Dict, None, None]:
@@ -297,34 +315,23 @@ def load_seed_file_rows(file_name: str) -> Generator[Dict, None, None]:
             yield json_content
 
 
-# TODO enhance to support bulk functionality while handling uniqueness constraints
-@pytest.fixture(scope="session", autouse=True)
-def setup_vuln_data(set_env_vars, anchore_db) -> None:
+@pytest.fixture(scope="module", autouse=True)
+def setup_vuln_data(request, set_env_vars, anchore_db) -> None:
     """
     Writes database seed file content to database. This allows us to ensure consistent vulnerability results (regardless of feed sync status).
     """
     with session_scope() as db:
+        all_records = []
         # set up vulnerability data
         for seed_file_name, entry_cls in SEED_FILE_TO_DB_TABLE_MAP.items():
             for db_entry in load_seed_file_rows(seed_file_name):
-                try:
-                    db.add(entry_cls(**db_entry))
-                    db.commit()
-                except exc.IntegrityError:
-                    db.rollback()
-
-        # set up nvdv2 feed in order to use nvdv2 and cpev2 data
-        try:
-            fmd = FeedMetadata(
-                name="nvdv2",
-                description="Feed record for type nvdv2",
-                last_full_sync=datetime.now(),
-                access_tier=0,
-                enabled=True,
-            )
-            db.add(fmd)
-            db.commit()
-        except exc.IntegrityError:
-            db.rollback()
-
+                all_records.append(entry_cls(**db_entry))
+        db.bulk_save_objects(all_records)
         db.flush()
+
+        def _remove_vulns():
+            engine = get_engine()
+
+            drop_vuln_data(engine)
+
+        request.addfinalizer(_remove_vulns)
