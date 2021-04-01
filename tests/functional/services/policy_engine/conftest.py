@@ -6,7 +6,8 @@ from typing import Callable, ContextManager, Dict, Generator, Sequence
 
 import jsonschema
 import pytest
-
+import tests.functional.services.catalog.utils.api as catalog_api
+import tests.functional.services.policy_engine.utils.api as policy_engine_api
 from anchore_engine.db import session_scope
 from anchore_engine.db.entities.common import (
     do_disconnect,
@@ -22,9 +23,7 @@ from anchore_engine.db.entities.policy_engine import (
     Vulnerability,
 )
 from anchore_engine.db.entities.upgrade import do_create_tables
-from tests.functional.services.catalog.utils import catalog_api
 from tests.functional.services.catalog.utils.utils import add_or_replace_document
-from tests.functional.services.policy_engine.utils import images_api
 from tests.functional.services.utils import http_utils
 
 CURRENT_DIR = path.dirname(path.abspath(__file__))
@@ -73,7 +72,7 @@ def add_catalog_documents(request) -> None:
             )
             image_id = analysis_document["document"][0]["image"]["imageId"]
             try:
-                images_api.delete_image(image_id)
+                policy_engine_api.users.delete_image(image_id)
             except http_utils.RequestFailedError as err:
                 if err.status_code != 404:
                     raise err
@@ -84,8 +83,12 @@ def add_catalog_documents(request) -> None:
         Cleanup, deletes added images and analyzer manifests.
         """
         for analysis_file in ANALYSIS_FILES:
-            catalog_api.delete_document("analysis_data", analysis_file.image_digest)
-            images_api.delete_image(IMAGE_DIGEST_ID_MAP[analysis_file.image_digest])
+            catalog_api.objects.delete_document(
+                "analysis_data", analysis_file.image_digest
+            )
+            policy_engine_api.users.delete_image(
+                IMAGE_DIGEST_ID_MAP[analysis_file.image_digest]
+            )
 
     request.addfinalizer(remove_documents_and_image)
 
@@ -108,9 +111,18 @@ def ingress_image(add_catalog_documents) -> Callable[[str], http_utils.APIRespon
         """
         fetch_url = f"catalog://{http_utils.DEFAULT_API_CONF['ANCHORE_API_ACCOUNT']}/analysis_data/{image_digest}"
         image_id = IMAGE_DIGEST_ID_MAP[image_digest]
-        return images_api.ingress_image(fetch_url, image_id)
+        return policy_engine_api.images.ingress_image(fetch_url, image_id)
 
     return _ingress_image
+
+
+@pytest.fixture
+def ingress_all_images(ingress_image) -> None:
+    """
+    Ingress all test images.
+    """
+    for analysis_file in ANALYSIS_FILES:
+        ingress_image(analysis_file.image_digest)
 
 
 @pytest.fixture(scope="session")
