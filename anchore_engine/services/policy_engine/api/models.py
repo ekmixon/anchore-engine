@@ -361,10 +361,27 @@ class ImageIngressRequest(JsonSerializable):
         self.fetch_url = fetch_url
 
 
+class VulnerabilityScanProblem(JsonSerializable):
+    class VulnerabilityScanProblemV1Schema(Schema):
+        message = fields.Str()
+
+        @post_load
+        def make(self, data, **kwargs):
+            return VulnerabilityScanProblem(**data)
+
+    __schema__ = VulnerabilityScanProblemV1Schema()
+
+    def __init__(self, message=None):
+        self.message = message
+
+
 class ImageIngressResponse(JsonSerializable):
     class ImageIngressResponseV1Schema(Schema):
         status = fields.Str()
         vulnerability_report = fields.Dict()
+        errors = fields.List(
+            fields.Nested(VulnerabilityScanProblem.VulnerabilityScanProblemV1Schema)
+        )
 
         @post_load
         def make(self, data, **kwargs):
@@ -372,9 +389,10 @@ class ImageIngressResponse(JsonSerializable):
 
     __schema__ = ImageIngressResponseV1Schema()
 
-    def __init__(self, status=None, vulnerability_report=None):
+    def __init__(self, status=None, vulnerability_report=None, errors=None):
         self.status = status
         self.vulnerability_report = vulnerability_report
+        self.errors = errors
 
 
 class TriggerParamSpec(JsonSerializable):

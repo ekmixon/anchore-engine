@@ -1051,6 +1051,20 @@ definitions:
         - loaded
       vulnerability_report:
         $ref: "#/definitions/ImageVulnerabilityListing"
+      errors:
+        type: array
+        description: list of error objects indicating errors encountered during vulnerability scan
+        items:
+          $ref: "#/definitions/VulnerabilityScanProblem"
+  VulnerabilityScanProblem:
+    type: object
+    description: Details for an error or warning indicating a problem during vulnerability scan
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        description: Details about the problem
   PolicyEvaluation:
     type: object
     description: 'A policy bundle evaluation result for a specific image, tag, policy tuple'

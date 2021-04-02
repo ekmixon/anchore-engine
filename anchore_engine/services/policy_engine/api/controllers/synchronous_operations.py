@@ -32,6 +32,7 @@ from anchore_engine.services.policy_engine.api.models import (
     TriggerParamSpec,
     TriggerSpec,
     GateSpec,
+    VulnerabilityScanProblem,
 )
 
 from anchore_engine.db import (
@@ -1072,9 +1073,12 @@ def ingress_image(ingress_request):
             # We're doing a sync call above, so just send loaded. It should be 'accepted' once async works.
             resp.status = "loaded"
         resp.vulnerability_report = get_image_vulnerabilities(req.user_id, req.image_id)
+        resp.errors = []
         if isinstance(resp.vulnerability_report, list):
             if "httpcode" in resp.vulnerability_report[0]:
-                raise Exception(resp.vulnerability_report[0]["message"])
+                resp.errors.append(
+                    VulnerabilityScanProblem(resp.vulnerability_report[0]["message"])
+                )
         return resp.to_json(), 200
     except Exception as e:
         log.exception("Error loading image into policy engine")
