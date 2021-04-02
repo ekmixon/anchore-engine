@@ -22,7 +22,7 @@ from anchore_engine.db.entities.policy_engine import (
     NvdV2Metadata,
     Vulnerability,
 )
-from anchore_engine.db.entities.catalog import CatalogImage
+from anchore_engine.db.entities.catalog import CatalogImage, CatalogImageDocker
 from anchore_engine.db.entities.upgrade import do_create_tables
 from tests.functional.services.catalog.utils.utils import add_or_replace_document
 from tests.functional.services.utils import http_utils
@@ -267,6 +267,7 @@ SEED_FILE_TO_DB_TABLE_MAP: Dict[str, Callable] = {
     "feed_data_cpev2_vulnerabilities.json": CpeV2Vulnerability,
     "feeds.json": FeedMetadata,
     "catalog_image.json": CatalogImage,
+    "catalog_image_docker.json": CatalogImageDocker,
 }
 
 SEED_FILE_TO_METADATA_MAP: Dict[str, str] = {
