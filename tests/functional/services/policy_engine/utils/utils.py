@@ -13,8 +13,10 @@ class ImagesByVulnerabilityQueryOptions:
 @dataclass
 class ImagesByVulnerabilityQuery:
     vulnerability_id: str
-    query_metadata: Optional[ImagesByVulnerabilityQueryOptions]
     affected_images: List[str]
+    query_metadata: Optional[ImagesByVulnerabilityQueryOptions] = field(
+        default_factory=ImagesByVulnerabilityQueryOptions
+    )
 
 
 @dataclass
