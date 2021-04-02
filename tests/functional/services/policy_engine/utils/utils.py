@@ -3,7 +3,7 @@ from typing import List, Optional
 
 
 @dataclass
-class VulnerabilityQueryMetadata:
+class ImagesByVulnerabilityQueryOptions:
     severity: Optional[str] = None
     namespace: Optional[str] = None
     affected_package: Optional[str] = None
@@ -11,7 +11,7 @@ class VulnerabilityQueryMetadata:
 
 
 @dataclass
-class VulnerabilityQuery:
+class ImagesByVulnerabilityQuery:
     vulnerability_id: str
-    query_metadata: Optional[VulnerabilityQueryMetadata]
+    query_metadata: Optional[ImagesByVulnerabilityQueryOptions]
     affected_images: List[str]
