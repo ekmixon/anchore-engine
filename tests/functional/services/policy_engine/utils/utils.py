@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List, Optional
 
 
@@ -15,3 +15,19 @@ class ImagesByVulnerabilityQuery:
     vulnerability_id: str
     query_metadata: Optional[ImagesByVulnerabilityQueryOptions]
     affected_images: List[str]
+
+
+@dataclass
+class VulnerabilityQueryMetadata:
+    affected_package: Optional[str] = None
+    affected_package_version: Optional[str] = None
+    namespace: Optional[str] = None
+
+
+@dataclass
+class VulnerabilityQuery:
+    id: list
+    expected_output_file: str
+    query_metadata: Optional[VulnerabilityQueryMetadata] = field(
+        default_factory=VulnerabilityQueryMetadata
+    )
