@@ -22,6 +22,7 @@ from anchore_engine.db.entities.policy_engine import (
     NvdV2Metadata,
     Vulnerability,
 )
+from anchore_engine.db.entities.catalog import CatalogImage
 from anchore_engine.db.entities.upgrade import do_create_tables
 from tests.functional.services.catalog.utils.utils import add_or_replace_document
 from tests.functional.services.utils import http_utils
@@ -57,7 +58,7 @@ ANALYSIS_FILES: Sequence[AnalysisFile] = [
 IMAGE_DIGEST_ID_MAP: Dict[str, str] = {}
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def add_catalog_documents(request) -> None:
     """
     Adds analyzer manifests to catalog. Deletes existing manifests and images if they exist.
@@ -93,7 +94,7 @@ def add_catalog_documents(request) -> None:
     request.addfinalizer(remove_documents_and_image)
 
 
-@pytest.fixture
+@pytest.fixture(scope="class")
 def ingress_image(add_catalog_documents) -> Callable[[str], http_utils.APIResponse]:
     """
     Returns method that adds new image to policy engine for vulnerability scanning. Moved to fixture to reduce code duplication.
@@ -116,7 +117,7 @@ def ingress_image(add_catalog_documents) -> Callable[[str], http_utils.APIRespon
     return _ingress_image
 
 
-@pytest.fixture
+@pytest.fixture(scope="class")
 def ingress_all_images(ingress_image) -> None:
     """
     Ingress all test images.
@@ -265,6 +266,7 @@ SEED_FILE_TO_DB_TABLE_MAP: Dict[str, Callable] = {
     "feed_data_nvdv2_vulnerabilities.json": NvdV2Metadata,
     "feed_data_cpev2_vulnerabilities.json": CpeV2Vulnerability,
     "feeds.json": FeedMetadata,
+    "catalog_image.json": CatalogImage,
 }
 
 SEED_FILE_TO_METADATA_MAP: Dict[str, str] = {
