@@ -196,16 +196,14 @@ class SchemaResolver:
         """
         Load jsonschema files, check that the schemas are valid, and create schema resolver.
         """
-        vulnerability_schema = load_jsonschema("vulnerability_report.schema.json")
-        ingress_schema = load_jsonschema("ingress_vulnerability_report.schema.json")
-        jsonschema.Draft7Validator.check_schema(vulnerability_schema)
-        jsonschema.Draft7Validator.check_schema(ingress_schema)
-        schema_map = {
-            vulnerability_schema["$id"]: vulnerability_schema,
-            ingress_schema["$id"]: ingress_schema,
-        }
-        cls.resolver = jsonschema.RefResolver.from_schema(
-            ingress_schema, store=schema_map
+        schema_map = {}
+        for file in os.listdir(SCHEMA_FILE_DIR):
+            if "schema.json" in file:
+                schema = load_jsonschema(file)
+                jsonschema.Draft7Validator.check_schema(schema)
+                schema_map[schema["$id"]] = schema
+        cls.resolver = jsonschema.RefResolver(
+            base_uri="", referrer="", store=schema_map
         )
 
     @classmethod
@@ -249,6 +247,16 @@ def ingress_jsonschema() -> jsonschema.Draft7Validator:
     :rtype: jsonschema.Draft7Validator
     """
     return SchemaResolver().get_validator("ingress_vulnerability_report.schema.json")
+
+
+@pytest.fixture(scope="session")
+def query_by_vuln_jsonschema() -> jsonschema.Draft7Validator:
+    """
+    Loads jsonschema validator for the get_images_by_vulnerability endpoint.
+    :return: jsonschema validator
+    :rtype: jsonschema.Draft7Validator
+    """
+    return SchemaResolver().get_validator("query_by_vulnerability.schema.json")
 
 
 SEED_FILE_TO_DB_TABLE_MAP: Dict[str, Callable] = {

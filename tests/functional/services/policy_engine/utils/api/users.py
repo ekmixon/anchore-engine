@@ -1,3 +1,5 @@
+from typing import Optional
+
 from tests.functional.services.policy_engine.utils.api.conf import (
     policy_engine_api_conf,
 )
@@ -44,3 +46,42 @@ def get_image_vulnerabilities(image_id: str) -> http_utils.APIResponse:
         )
 
     return image_vulnerabilities_resp
+
+
+def get_images_by_vulnerability(
+    vulnerability_id: str,
+    severity: Optional[str] = None,
+    namespace: Optional[str] = None,
+    affected_package: Optional[str] = None,
+    vendor_only: bool = True,
+) -> http_utils.APIResponse:
+    if not vulnerability_id:
+        raise ValueError("Cannot query image by vulnerability without vulnerability id")
+    query = {"vulnerability_id": vulnerability_id, "vendor_only": vendor_only}
+    if not isinstance(severity, type(None)):
+        query["severity"] = severity
+    if not isinstance(namespace, type(None)):
+        query["namespace"] = namespace
+    if not isinstance(affected_package, type(None)):
+        query["affected_package"] = affected_package
+
+    image_by_vuln_resp = http_utils.http_get(
+        [
+            "users",
+            policy_engine_api_conf().get("ANCHORE_API_USER"),
+            "query",
+            "images",
+            "by_vulnerability",
+        ],
+        query=query,
+        config=policy_engine_api_conf,
+    )
+
+    if image_by_vuln_resp.code > 300:
+        raise http_utils.RequestFailedError(
+            image_by_vuln_resp.url,
+            image_by_vuln_resp.code,
+            image_by_vuln_resp.body,
+        )
+
+    return image_by_vuln_resp
