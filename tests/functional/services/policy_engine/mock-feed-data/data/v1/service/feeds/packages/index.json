@@ -1,0 +1,1 @@
+{"groups": [{"access_tier": 0, "description": "Group record for namespace: gem and feed type: packages", "name": "gem"}, {"access_tier": 0, "description": "Group record for namespace: npm and feed type: packages", "name": "npm"}], "next_token": ""}
