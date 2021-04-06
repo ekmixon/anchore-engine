@@ -331,6 +331,9 @@ def load_seed_file_rows(file_name: str) -> Generator[Dict, None, None]:
 
 
 def _setup_vuln_data():
+    """
+    Loads database seed files and bulk saves all records direclty to db
+    """
     with session_scope() as db:
         all_records = []
         # set up vulnerability data
@@ -342,6 +345,9 @@ def _setup_vuln_data():
 
 
 def _teardown_vuln_data():
+    """
+    Drops all vulnerability related data
+    """
     tablenames = [cls.__tablename__ for cls in SEED_FILE_TO_DB_TABLE_MAP.values()]
     tablenames_joined = ", ".join(map(str, tablenames))
     engine = get_engine()
@@ -367,6 +373,10 @@ def setup_vuln_data(
 
 @pytest.fixture
 def clear_database_temporary(request) -> None:
+    """
+    Temporarily removes all vulnerability data from db and reloads the database seed files once test context has finished
+    This is used for feeds sync tests to ensure clean db. Reloads seed files for other tests in modules that rely on it
+    """
     _teardown_vuln_data()
 
     def setup():

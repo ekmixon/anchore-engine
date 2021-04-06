@@ -10,6 +10,13 @@ from tests.functional.services.utils import http_utils
 class TestFeedSync:
     @classmethod
     def _find_by_name(cls, records, name):
+        """
+        From a list of objects/dictionaries, selects first index with matching name. Returns None if nothing is found
+        :param records: list of objects or dictionaries that are expected to have 'name' attr
+        :type records: list
+        :return: dict with matching name or 'None' if nothing found
+        :rtype: Union[dict, None]
+        """
         for record in records:
             if record["name"] == name:
                 return record
@@ -17,6 +24,13 @@ class TestFeedSync:
 
     @classmethod
     def _get_vuln_ids(cls, expected_vulns):
+        """
+        From a list of expected vulns taken from feeds service, find corresponding vulnerability ids for querying anchore
+        :param expected_vulns: list of records in group from feed
+        :type expected_vulns: list
+        :return: list of vulnerabilitiy_ids as they would be stored in anchore
+        :rtype: list
+        """
         vuln_ids = []
         for vuln in expected_vulns:
             if "Advisory" in vuln:
