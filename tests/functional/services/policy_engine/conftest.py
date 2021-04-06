@@ -32,6 +32,7 @@ ANALYSIS_FILES_DIR = path.join(CURRENT_DIR, "analysis_files")
 VULN_OUTPUT_DIR = path.join(CURRENT_DIR, "expected_output")
 SCHEMA_FILE_DIR = path.join(CURRENT_DIR, "schema_files")
 SEED_FILE_DIR = path.join(CURRENT_DIR, "database_seed_files")
+FEEDS_DIR = path.join(CURRENT_DIR, "mock-feed-data", "data", "v1", "service", "feeds")
 
 
 @dataclass
