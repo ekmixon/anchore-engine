@@ -6,9 +6,11 @@ from typing import Callable, ContextManager, Dict, Generator, Sequence
 
 import jsonschema
 import pytest
+
 import tests.functional.services.catalog.utils.api as catalog_api
 import tests.functional.services.policy_engine.utils.api as policy_engine_api
 from anchore_engine.db import session_scope
+from anchore_engine.db.entities.catalog import CatalogImage, CatalogImageDocker
 from anchore_engine.db.entities.common import (
     do_disconnect,
     end_session,
@@ -22,7 +24,6 @@ from anchore_engine.db.entities.policy_engine import (
     NvdV2Metadata,
     Vulnerability,
 )
-from anchore_engine.db.entities.catalog import CatalogImage, CatalogImageDocker
 from anchore_engine.db.entities.upgrade import do_create_tables
 from tests.functional.services.catalog.utils.utils import add_or_replace_document
 from tests.functional.services.utils import http_utils
@@ -32,7 +33,7 @@ ANALYSIS_FILES_DIR = path.join(CURRENT_DIR, "analysis_files")
 VULN_OUTPUT_DIR = path.join(CURRENT_DIR, "expected_output")
 SCHEMA_FILE_DIR = path.join(CURRENT_DIR, "schema_files")
 SEED_FILE_DIR = path.join(CURRENT_DIR, "database_seed_files")
-FEEDS_DIR = path.join(CURRENT_DIR, "mock-feed-data", "data", "v1", "service", "feeds")
+FEEDS_DATA_PATH_PREFIX = path.join("data", "v1", "service", "feeds")
 
 
 @dataclass
@@ -300,27 +301,13 @@ def anchore_db() -> ContextManager[bool]:
 
     conn_str = os.getenv("ANCHORE_TEST_DB_URL")
     assert conn_str
-
     config = {"credentials": {"database": {"db_connect": conn_str}}}
-
     try:
         ret = initialize(localconfig=config)
-        engine = get_engine()
-
-        drop_vuln_data(engine)
-
         yield ret
     finally:
         end_session()
         do_disconnect()
-
-
-def drop_vuln_data(engine):
-    tablenames = [cls.__tablename__ for cls in SEED_FILE_TO_DB_TABLE_MAP.values()]
-    tablenames = ", ".join(map(str, tablenames))
-
-    engine.execute(f"DROP TABLE {tablenames} CASCADE")
-    do_create_tables()
 
 
 def load_seed_file_rows(file_name: str) -> Generator[Dict, None, None]:
@@ -343,11 +330,7 @@ def load_seed_file_rows(file_name: str) -> Generator[Dict, None, None]:
             yield json_content
 
 
-@pytest.fixture(scope="module", autouse=True)
-def setup_vuln_data(request, set_env_vars, anchore_db) -> None:
-    """
-    Writes database seed file content to database. This allows us to ensure consistent vulnerability results (regardless of feed sync status).
-    """
+def _setup_vuln_data():
     with session_scope() as db:
         all_records = []
         # set up vulnerability data
@@ -357,9 +340,37 @@ def setup_vuln_data(request, set_env_vars, anchore_db) -> None:
         db.bulk_save_objects(all_records)
         db.flush()
 
-        def _remove_vulns():
-            engine = get_engine()
 
-            drop_vuln_data(engine)
+def _teardown_vuln_data():
+    tablenames = [cls.__tablename__ for cls in SEED_FILE_TO_DB_TABLE_MAP.values()]
+    tablenames_joined = ", ".join(map(str, tablenames))
+    engine = get_engine()
+    with engine.connect() as connection:
+        with connection.begin():
+            connection.execute(f"DROP TABLE {tablenames_joined} CASCADE")
+    do_create_tables()
 
-        request.addfinalizer(_remove_vulns)
+
+@pytest.fixture(scope="module", autouse=True)
+def setup_vuln_data(
+    request,
+    set_env_vars,
+    anchore_db,
+) -> None:
+    """
+    Writes database seed file content to database. This allows us to ensure consistent vulnerability results (regardless of feed sync status).
+    """
+    _teardown_vuln_data()
+    _setup_vuln_data()
+    request.addfinalizer(_teardown_vuln_data)
+
+
+@pytest.fixture
+def clear_database_temporary(request) -> None:
+    _teardown_vuln_data()
+
+    def setup():
+        _teardown_vuln_data()
+        _setup_vuln_data()
+
+    request.addfinalizer(setup)
