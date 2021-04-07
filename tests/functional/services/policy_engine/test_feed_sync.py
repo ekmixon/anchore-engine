@@ -1,4 +1,7 @@
+import logging
 import os
+
+import pytest
 
 import tests.functional.services.policy_engine.utils.api as policy_engine_api
 from tests.functional.services.policy_engine.conftest import FEEDS_DATA_PATH_PREFIX
@@ -47,13 +50,33 @@ class TestFeedSync:
                     vuln_ids.append(vuln["Vulnerability"]["Name"])
         return vuln_ids
 
-    def test_expected_feed_sync(self, expected_content, clear_database_temporary):
+    def test_expected_feed_sync(
+        self,
+        expected_content,
+        clear_database_temporary,
+        feeds_sync_jsonschema,
+        feeds_get_jsonschema,
+    ):
         feed_sync_resp = policy_engine_api.feeds.feeds_sync()
         assert feed_sync_resp == http_utils.APIResponse(200)
         for feed in feed_sync_resp.body:
             assert feed["status"] == "success"
 
+        # validate schema of feed sync call
+        is_valid: bool = feeds_sync_jsonschema.is_valid(feed_sync_resp.body)
+        if not is_valid:
+            for err in feeds_sync_jsonschema.iter_errors(feed_sync_resp.body):
+                logging.error(err)
+        assert is_valid
+
         feeds_get_resp = policy_engine_api.feeds.get_feeds(True)
+
+        # validate schema of get feeds call
+        is_valid: bool = feeds_get_jsonschema.is_valid(feeds_get_resp.body)
+        if not is_valid:
+            for err in feeds_get_jsonschema.iter_errors(feeds_get_resp.body):
+                logging.error(err)
+        assert is_valid
 
         # get feeds index file
         expected_feeds = expected_content(

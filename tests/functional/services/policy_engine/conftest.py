@@ -262,6 +262,26 @@ def query_by_vuln_jsonschema() -> jsonschema.Draft7Validator:
     return SchemaResolver().get_validator("query_by_vulnerability.schema.json")
 
 
+@pytest.fixture(scope="session")
+def feeds_sync_jsonschema() -> jsonschema.Draft7Validator:
+    """
+    Loads jsonschema validator for feed sync endpoint.
+    :return: jsonschema validator
+    :rtype: jsonschema.Draft7Validator
+    """
+    return SchemaResolver().get_validator("feeds_sync.schema.json")
+
+
+@pytest.fixture(scope="session")
+def feeds_get_jsonschema() -> jsonschema.Draft7Validator:
+    """
+    Loads jsonschema validator for feeds get endpoint.
+    :return: jsonschema validator
+    :rtype: jsonschema.Draft7Validator
+    """
+    return SchemaResolver().get_validator("feeds_get.schema.json")
+
+
 SEED_FILE_TO_DB_TABLE_MAP: Dict[str, Callable] = {
     "feed_data_vulnerabilities.json": Vulnerability,
     "feed_data_vulnerabilities_fixed_artifacts.json": FixedArtifact,
