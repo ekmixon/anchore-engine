@@ -391,7 +391,7 @@ def setup_vuln_data(
     request.addfinalizer(_teardown_vuln_data)
 
 
-@pytest.fixture
+@pytest.fixture(scope="class")
 def clear_database_temporary(request) -> None:
     """
     Temporarily removes all vulnerability data from db and reloads the database seed files once test context has finished
