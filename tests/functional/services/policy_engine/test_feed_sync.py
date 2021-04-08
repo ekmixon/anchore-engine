@@ -5,20 +5,47 @@ import pytest
 import tests.functional.services.policy_engine.utils.api as policy_engine_api
 from tests.functional.services.policy_engine.conftest import FEEDS_DATA_PATH_PREFIX
 from tests.functional.services.utils import http_utils
+from tests.functional.services.policy_engine.conftest import read_expected_content
+
+
+def build_feed_sync_test_matrix():
+    """
+    Builds the parameters to use for the feed sync test by reading files of expected content
+    Creates an array of tuples:
+        1. first index is the feed object from the feeds index.json file
+        2. second index is the group object from the individual feed's index file
+    """
+    params = []
+    feeds = read_expected_content(
+        __file__, os.path.join(FEEDS_DATA_PATH_PREFIX, "index")
+    )["feeds"]
+    for feed in feeds:
+        groups = read_expected_content(
+            __file__, os.path.join(FEEDS_DATA_PATH_PREFIX, feed["name"], "index")
+        )["groups"]
+        for group in groups:
+            params.append((feed, group))
+
+    return params
 
 
 class TestFeedSync:
     @classmethod
-    def _find_by_name(cls, records, name):
+    def try_it(cls):
+        return ["1", "2"]
+
+    @classmethod
+    def _find_by_attr(cls, attr, records, value):
         """
-        From a list of objects/dictionaries, selects first index with matching name. Returns None if nothing is found
-        :param records: list of objects or dictionaries that are expected to have 'name' attr
+        From a list of objects/dictionaries, selects first index with matching value of specified attr.
+        Returns None if nothing is found
+        :param records: list of objects or dictionaries that are expected to have attr
         :type records: list
-        :return: dict with matching name or 'None' if nothing found
+        :return: dict with matching value for specified attr or 'None' if nothing found
         :rtype: Union[dict, None]
         """
         for record in records:
-            if record["name"] == name:
+            if record[attr] == value:
                 return record
         return None
 
@@ -72,58 +99,53 @@ class TestFeedSync:
             [str(e) for e in validator.iter_errors(feeds_get_resp.body)]
         )
 
-    def test_expected_feed_sync(self, expected_content, sync_feeds):
-        feed_sync_resp = policy_engine_api.feeds.feeds_sync()
+    @pytest.mark.parametrize(
+        "expected_feed, expected_group", build_feed_sync_test_matrix()
+    )
+    def test_expected_feed_sync(
+        self, expected_feed, expected_group, expected_content, sync_feeds
+    ):
+        # sync feeds and verify that the feed was a success
+        feed_sync_resp = sync_feeds
         assert feed_sync_resp == http_utils.APIResponse(200)
-        for feed in feed_sync_resp.body:
-            assert feed["status"] == "success"
+        assert (
+            self._find_by_attr("feed", feed_sync_resp.body, expected_feed["name"])[
+                "status"
+            ]
+            == "success"
+        )
 
+        # call get all feeds
         feeds_get_resp = policy_engine_api.feeds.get_feeds(True)
 
-        # get feeds index file
-        expected_feeds = expected_content(
-            os.path.join(FEEDS_DATA_PATH_PREFIX, "index")
-        )["feeds"]
+        # assert that expected feed is present in found list and enabled
+        actual_feed = self._find_by_attr(
+            "name", feeds_get_resp.body, expected_feed["name"]
+        )
+        assert not isinstance(actual_feed, type(None))
+        assert actual_feed["enabled"]
 
-        assert len(feeds_get_resp.body) == len(expected_feeds)
+        # Verify that the expected group is present and enabled
+        actual_group = self._find_by_attr(
+            "name", actual_feed["groups"], expected_group["name"]
+        )
+        assert not isinstance(actual_group, type(None))
+        assert actual_group["enabled"]
 
-        for expected_feed in expected_feeds:
-            # assert that expected feed is present in found list and enabled
-            actual_feed = self._find_by_name(feeds_get_resp.body, expected_feed["name"])
-            assert not isinstance(actual_feed, type(None))
-            assert actual_feed["enabled"]
+        # get expected cves and query to verify the count in the get feeds response
+        expected_vulns = expected_content(
+            os.path.join(
+                FEEDS_DATA_PATH_PREFIX,
+                expected_feed["name"],
+                expected_group["name"],
+            )
+        )["data"]
+        assert actual_group["record_count"] == len(expected_vulns)
 
-            expected_groups = expected_content(
-                os.path.join(FEEDS_DATA_PATH_PREFIX, expected_feed["name"], "index")
-            )["groups"]
-
-            # iterate over expected groups and verify data
-            for expected_group in expected_groups:
-                actual_group = self._find_by_name(
-                    actual_feed["groups"], expected_group["name"]
-                )
-                assert actual_group
-                assert actual_group["enabled"]
-
-                # get expected cves and query to verify they are present
-                expected_vulns = expected_content(
-                    os.path.join(
-                        FEEDS_DATA_PATH_PREFIX,
-                        expected_feed["name"],
-                        expected_group["name"],
-                    )
-                )["data"]
-                assert actual_group["record_count"] == len(expected_vulns)
-
-                vuln_ids = self._get_vuln_ids(expected_vulns)
-
-                vuln_response = (
-                    policy_engine_api.query_vulnerabilities.get_vulnerabilities(
-                        vuln_ids, namespace=expected_group["name"]
-                    )
-                )
-
-                assert len(vuln_response.body) == len(expected_vulns)
-                assert len(set([x["id"] for x in vuln_response.body])) == len(
-                    expected_vulns
-                )
+        # using expected cves, query the vulnerabilites endpoint to verify they are in the system
+        vuln_ids = self._get_vuln_ids(expected_vulns)
+        vuln_response = policy_engine_api.query_vulnerabilities.get_vulnerabilities(
+            vuln_ids, namespace=expected_group["name"]
+        )
+        assert len(vuln_response.body) == len(expected_vulns)
+        assert len(set([x["id"] for x in vuln_response.body])) == len(expected_vulns)

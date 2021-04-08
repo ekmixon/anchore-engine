@@ -137,6 +137,22 @@ def image_digest_id_map() -> Dict[str, str]:
     return IMAGE_DIGEST_ID_MAP
 
 
+def read_expected_content(module_path, filename):
+    """
+    Loads expected vulnerability response json for a given image_digest
+    :param filename: name of file from which to load response
+    :type filename: str
+    :return: expected vulnerability response json
+    :rtype: Dict
+    """
+    module_filename_with_extension = path.basename(module_path)
+    module_filename = path.splitext(module_filename_with_extension)[0]
+    file_path = path.join(VULN_OUTPUT_DIR, module_filename, f"{filename}.json")
+    with open(file_path, "r") as f:
+        file_contents = f.read()
+        return json.loads(file_contents)
+
+
 @pytest.fixture
 def expected_content(request) -> Callable[[str], Dict]:
     """
@@ -146,21 +162,8 @@ def expected_content(request) -> Callable[[str], Dict]:
     """
 
     def get_expected_content(filename) -> Dict:
-        """
-        Loads expected vulnerability response json for a given image_digest
-        :param filename: name of file from which to load response
-        :type filename: str
-        :return: expected vulnerability response json
-        :rtype: Dict
-        """
         module_path = request.module.__file__
-        module_filename_with_extension = path.basename(module_path)
-        module_filename = path.splitext(module_filename_with_extension)[0]
-
-        file_path = path.join(VULN_OUTPUT_DIR, module_filename, f"{filename}.json")
-        with open(file_path, "r") as f:
-            file_contents = f.read()
-            return json.loads(file_contents)
+        return read_expected_content(module_path, filename)
 
     return get_expected_content
 
