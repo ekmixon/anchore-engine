@@ -15,7 +15,7 @@ def delete_image(image_id: str) -> http_utils.APIResponse:
         config=policy_engine_api_conf,
     )
 
-    if delete_image_resp.code > 300:
+    if delete_image_resp.code > 299:
         raise http_utils.RequestFailedError(
             delete_image_resp.url, delete_image_resp.code, delete_image_resp.body
         )
@@ -38,7 +38,7 @@ def get_image_vulnerabilities(image_id: str) -> http_utils.APIResponse:
         config=policy_engine_api_conf,
     )
 
-    if image_vulnerabilities_resp.code > 300:
+    if image_vulnerabilities_resp.code != 200:
         raise http_utils.RequestFailedError(
             image_vulnerabilities_resp.url,
             image_vulnerabilities_resp.code,
@@ -77,7 +77,7 @@ def get_images_by_vulnerability(
         config=policy_engine_api_conf,
     )
 
-    if image_by_vuln_resp.code > 300:
+    if image_by_vuln_resp.code != 200:
         raise http_utils.RequestFailedError(
             image_by_vuln_resp.url,
             image_by_vuln_resp.code,
