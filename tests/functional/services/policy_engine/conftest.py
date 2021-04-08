@@ -356,7 +356,7 @@ def setup_vuln_data(
 
 
 @pytest.fixture(scope="class")
-def clear_database_temporary(request) -> None:
+def clear_vuln_data_temporary(request) -> None:
     """
     Temporarily removes all vulnerability data from db and reloads the database seed files once test context has finished
     This is used for feeds sync tests to ensure clean db. Reloads seed files for other tests in modules that rely on it
