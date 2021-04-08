@@ -233,14 +233,14 @@ class SchemaResolver:
 
 
 @pytest.fixture(scope="class")
-def schema_validator():
+def schema_validator() -> Callable[[str], jsonschema.Draft7Validator]:
     """
     Returns function that loads jsonschema validator for given schema filename
     :return: jsonschema validator generator
-    :rtype: function
+    :rtype: Callable[[str], jsonschema.Draft7Validator]
     """
 
-    def _schema_validator(schema_filename) -> jsonschema.Draft7Validator:
+    def _schema_validator(schema_filename: str) -> jsonschema.Draft7Validator:
         return SchemaResolver().get_validator(schema_filename)
 
     return _schema_validator
