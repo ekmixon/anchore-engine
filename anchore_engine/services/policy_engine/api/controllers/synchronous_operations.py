@@ -1073,10 +1073,10 @@ def ingress_image(ingress_request):
             # We're doing a sync call above, so just send loaded. It should be 'accepted' once async works.
             resp.status = "loaded"
         resp.vulnerability_report = get_image_vulnerabilities(req.user_id, req.image_id)
-        resp.errors = []
+        resp.problems = []
         if isinstance(resp.vulnerability_report, list):
             if "httpcode" in resp.vulnerability_report[0]:
-                resp.errors.append(
+                resp.problems.append(
                     VulnerabilityScanProblem(resp.vulnerability_report[0]["message"])
                 )
         return resp.to_json(), 200

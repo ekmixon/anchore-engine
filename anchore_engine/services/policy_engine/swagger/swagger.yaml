@@ -1051,7 +1051,7 @@ definitions:
         - loaded
       vulnerability_report:
         $ref: "#/definitions/ImageVulnerabilityListing"
-      errors:
+      problems:
         type: array
         description: list of error objects indicating errors encountered during vulnerability scan
         items:
@@ -1060,7 +1060,7 @@ definitions:
     type: object
     description: Details for an error or warning indicating a problem during vulnerability scan
     required:
-      - message
+      - details
     properties:
       message:
         type: string

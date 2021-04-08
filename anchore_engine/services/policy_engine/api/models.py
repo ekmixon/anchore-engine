@@ -363,7 +363,7 @@ class ImageIngressRequest(JsonSerializable):
 
 class VulnerabilityScanProblem(JsonSerializable):
     class VulnerabilityScanProblemV1Schema(Schema):
-        message = fields.Str()
+        details = fields.Str()
 
         @post_load
         def make(self, data, **kwargs):
@@ -371,15 +371,15 @@ class VulnerabilityScanProblem(JsonSerializable):
 
     __schema__ = VulnerabilityScanProblemV1Schema()
 
-    def __init__(self, message=None):
-        self.message = message
+    def __init__(self, details=None):
+        self.details = details
 
 
 class ImageIngressResponse(JsonSerializable):
     class ImageIngressResponseV1Schema(Schema):
         status = fields.Str()
         vulnerability_report = fields.Dict()
-        errors = fields.List(
+        problems = fields.List(
             fields.Nested(VulnerabilityScanProblem.VulnerabilityScanProblemV1Schema)
         )
 
