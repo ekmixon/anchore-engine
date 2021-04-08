@@ -55,19 +55,21 @@ class TestFeedSync:
         """
         return policy_engine_api.feeds.feeds_sync()
 
-    def test_feeds_sync_schema(self, sync_feeds, feeds_sync_jsonschema):
+    def test_feeds_sync_schema(self, sync_feeds, schema_validator):
         feed_sync_resp = sync_feeds
-        is_valid: bool = feeds_sync_jsonschema.is_valid(feed_sync_resp.body)
+        feeds_sync_schema_validator = schema_validator("feeds_sync.schema.json")
+        is_valid: bool = feeds_sync_schema_validator.is_valid(feed_sync_resp.body)
         if not is_valid:
-            for err in feeds_sync_jsonschema.iter_errors(feed_sync_resp.body):
+            for err in feeds_sync_schema_validator.iter_errors(feed_sync_resp.body):
                 logging.error(err)
         assert is_valid
 
-    def test_feeds_get_schema(self, sync_feeds, feeds_get_jsonschema):
+    def test_feeds_get_schema(self, sync_feeds, schema_validator):
         feeds_get_resp = policy_engine_api.feeds.get_feeds(True)
-        is_valid: bool = feeds_get_jsonschema.is_valid(feeds_get_resp.body)
+        validator = schema_validator("feeds_get.schema.json")
+        is_valid: bool = validator.is_valid(feeds_get_resp.body)
         if not is_valid:
-            for err in feeds_get_jsonschema.iter_errors(feeds_get_resp.body):
+            for err in validator.iter_errors(feeds_get_resp.body):
                 logging.error(err)
         assert is_valid
 

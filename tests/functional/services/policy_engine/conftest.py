@@ -232,54 +232,18 @@ class SchemaResolver:
         return jsonschema.Draft7Validator(cls.get_schema(url), resolver=cls.resolver)
 
 
-@pytest.fixture(scope="session")
-def vulnerability_jsonschema() -> jsonschema.Draft7Validator:
+@pytest.fixture(scope="class")
+def schema_validator():
     """
-    Loads jsonschema validator for the get_image_vulnerabilities endpoint.
-    :return: jsonschema validator
-    :rtype: jsonschema.Draft7Validator
+    Returns function that loads jsonschema validator for given schema filename
+    :return: jsonschema validator generator
+    :rtype: function
     """
-    return SchemaResolver().get_validator("vulnerability_report.schema.json")
 
+    def _schema_validator(schema_filename) -> jsonschema.Draft7Validator:
+        return SchemaResolver().get_validator(schema_filename)
 
-@pytest.fixture(scope="session")
-def ingress_jsonschema() -> jsonschema.Draft7Validator:
-    """
-    Loads jsonschema validator for the image_ingress endpoint.
-    :return: jsonschema validator
-    :rtype: jsonschema.Draft7Validator
-    """
-    return SchemaResolver().get_validator("ingress_vulnerability_report.schema.json")
-
-
-@pytest.fixture(scope="session")
-def query_by_vuln_jsonschema() -> jsonschema.Draft7Validator:
-    """
-    Loads jsonschema validator for the get_images_by_vulnerability endpoint.
-    :return: jsonschema validator
-    :rtype: jsonschema.Draft7Validator
-    """
-    return SchemaResolver().get_validator("query_by_vulnerability.schema.json")
-
-
-@pytest.fixture(scope="session")
-def feeds_sync_jsonschema() -> jsonschema.Draft7Validator:
-    """
-    Loads jsonschema validator for feed sync endpoint.
-    :return: jsonschema validator
-    :rtype: jsonschema.Draft7Validator
-    """
-    return SchemaResolver().get_validator("feeds_sync.schema.json")
-
-
-@pytest.fixture(scope="session")
-def feeds_get_jsonschema() -> jsonschema.Draft7Validator:
-    """
-    Loads jsonschema validator for feeds get endpoint.
-    :return: jsonschema validator
-    :rtype: jsonschema.Draft7Validator
-    """
-    return SchemaResolver().get_validator("feeds_get.schema.json")
+    return _schema_validator
 
 
 SEED_FILE_TO_DB_TABLE_MAP: Dict[str, Callable] = {
