@@ -1,4 +1,3 @@
-import logging
 import os
 
 import pytest
@@ -58,19 +57,20 @@ class TestFeedSync:
         feed_sync_resp = sync_feeds
         feeds_sync_schema_validator = schema_validator("feeds_sync.schema.json")
         is_valid: bool = feeds_sync_schema_validator.is_valid(feed_sync_resp.body)
-        if not is_valid:
-            for err in feeds_sync_schema_validator.iter_errors(feed_sync_resp.body):
-                logging.error(err)
-        assert is_valid
+        assert is_valid, "\n".join(
+            [
+                str(e)
+                for e in feeds_sync_schema_validator.iter_errors(feed_sync_resp.body)
+            ]
+        )
 
     def test_feeds_get_schema(self, sync_feeds, schema_validator):
         feeds_get_resp = policy_engine_api.feeds.get_feeds(True)
         validator = schema_validator("feeds_get.schema.json")
         is_valid: bool = validator.is_valid(feeds_get_resp.body)
-        if not is_valid:
-            for err in validator.iter_errors(feeds_get_resp.body):
-                logging.error(err)
-        assert is_valid
+        assert is_valid, "\n".join(
+            [str(e) for e in validator.iter_errors(feeds_get_resp.body)]
+        )
 
     def test_expected_feed_sync(self, expected_content, sync_feeds):
         feed_sync_resp = policy_engine_api.feeds.feeds_sync()
