@@ -34,16 +34,15 @@ class TestFeedSync:
         """
         vuln_ids = []
         for vuln in expected_vulns:
+            # GHSA
             if "Advisory" in vuln:
-                if "ghsaId" in vuln["Advisory"]:
-                    vuln_ids.append(vuln["Advisory"]["ghsaId"])
-                else:
-                    vuln_ids += vuln["Advisory"]["CVE"]
-            if "@id" in vuln:
-                vuln_ids.append(vuln["@id"])
+                vuln_ids.append(vuln["Advisory"]["ghsaId"])
+            # NVDV2
             if "cve" in vuln:
                 vuln_ids.append(vuln["cve"]["CVE_data_meta"]["ID"])
+            # Vulnerabilities
             if "Vulnerability" in vuln:
+                # GHSA also has "Vulnerabilities", but value is empty object
                 if "Name" in vuln["Vulnerability"]:
                     vuln_ids.append(vuln["Vulnerability"]["Name"])
         return vuln_ids
