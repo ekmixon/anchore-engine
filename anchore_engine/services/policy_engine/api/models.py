@@ -389,10 +389,10 @@ class ImageIngressResponse(JsonSerializable):
 
     __schema__ = ImageIngressResponseV1Schema()
 
-    def __init__(self, status=None, vulnerability_report=None, errors=None):
+    def __init__(self, status=None, vulnerability_report=None, problems=None):
         self.status = status
         self.vulnerability_report = vulnerability_report
-        self.errors = errors
+        self.problems = problems
 
 
 class TriggerParamSpec(JsonSerializable):
