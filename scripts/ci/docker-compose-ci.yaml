@@ -177,8 +177,8 @@ services:
     ports:
       - "8448:8080"
     volumes:
-      - ../../tests/functional/services/policy_engine/expected_output/test_feed_sync/mock-feeds-nginx.conf:/etc/nginx/nginx.conf:z
-      - ../../tests/functional/services/policy_engine/expected_output/test_feed_sync/data:/www/data
+      - ../../tests/functional/services/policy_engine/feeds_data_tests/expected_output/test_feed_sync/mock-feeds-nginx.conf:/etc/nginx/nginx.conf:z
+      - ../../tests/functional/services/policy_engine/feeds_data_tests/expected_output/test_feed_sync/data:/www/data
     logging:
       driver: "json-file"
       options:
