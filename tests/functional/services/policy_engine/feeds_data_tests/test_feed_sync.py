@@ -10,6 +10,10 @@ from tests.functional.services.policy_engine.feeds_data_tests.conftest import (
 from tests.functional.services.utils import http_utils
 
 
+def idfn(val):
+    return val["name"]
+
+
 def build_feed_sync_test_matrix():
     """
     Builds the parameters to use for the feed sync test by reading files of expected content
@@ -98,7 +102,7 @@ class TestFeedSync:
         )
 
     @pytest.mark.parametrize(
-        "expected_feed, expected_group", build_feed_sync_test_matrix()
+        "expected_feed, expected_group", build_feed_sync_test_matrix(), ids=idfn
     )
     def test_expected_feed_sync(
         self, expected_feed, expected_group, expected_content, sync_feeds
