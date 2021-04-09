@@ -3,9 +3,11 @@ import os
 import pytest
 
 import tests.functional.services.policy_engine.utils.api as policy_engine_api
-from tests.functional.services.policy_engine.conftest import FEEDS_DATA_PATH_PREFIX
+from tests.functional.services.policy_engine.conftest import (
+    FEEDS_DATA_PATH_PREFIX,
+    read_expected_content,
+)
 from tests.functional.services.utils import http_utils
-from tests.functional.services.policy_engine.conftest import read_expected_content
 
 
 def build_feed_sync_test_matrix():
