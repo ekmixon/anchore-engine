@@ -33,10 +33,6 @@ def build_feed_sync_test_matrix():
 
 class TestFeedSync:
     @classmethod
-    def try_it(cls):
-        return ["1", "2"]
-
-    @classmethod
     def _find_by_attr(cls, attr, records, value):
         """
         From a list of objects/dictionaries, selects first index with matching value of specified attr.
