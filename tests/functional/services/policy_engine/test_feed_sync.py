@@ -74,7 +74,7 @@ class TestFeedSync:
         return vuln_ids
 
     @pytest.fixture(scope="class")
-    def sync_feeds(self, clear_vuln_data_temporary):
+    def sync_feeds(self, remove_vulnerabilty_seed_data_temporarily):
         """
         Uses clear database fixture and calls a feed sync. Scoped to occur only once for the class rather than each test
         """
