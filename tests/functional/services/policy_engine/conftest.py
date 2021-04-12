@@ -6,7 +6,12 @@ from typing import Callable, ContextManager, Dict, List, Optional
 import jsonschema
 import pytest
 
-from anchore_engine.db.entities.common import do_disconnect, end_session, initialize
+from anchore_engine.db.entities.common import (
+    do_disconnect,
+    end_session,
+    get_engine,
+    initialize,
+)
 
 CURRENT_DIR = path.dirname(path.abspath(__file__))
 EXPECTED_CONTENT_FOLDER_NAME = "expected_output"
@@ -141,7 +146,7 @@ def set_env_vars(monkeysession) -> None:
     if not os.getenv("ANCHORE_TEST_DB_URL"):
         monkeysession.setenv(
             "ANCHORE_TEST_DB_URL",
-            "postgresql://postgres:mysecretpassword@localhost:5432/postgres",
+            "postgresql://postgres:mysecretpassword@anchore-db:5432/postgres",
         )
 
 
