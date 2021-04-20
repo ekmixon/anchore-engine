@@ -30,10 +30,7 @@ from anchore_engine.services.policy_engine.engine.feeds.sync import (
     get_selected_feeds_to_sync,
     DataFeeds,
 )
-from anchore_engine.services.policy_engine.engine.feeds.feeds import (
-    notify_event,
-    GrypeDBFeed,
-)
+import anchore_engine.services.policy_engine.engine.feeds.feeds as feeds_module
 from anchore_engine.configuration import localconfig
 from anchore_engine.clients.services.simplequeue import run_target_with_lease
 from anchore_engine.subsys.events import (
@@ -214,7 +211,7 @@ class FeedsUpdateTask(IAsyncTask):
             catalog_client = internal_client_for(CatalogClient, userId=None)
 
         try:
-            notify_event(
+            feeds_module.notify_event(
                 FeedSyncTaskStarted(groups=self.feeds if self.feeds else "all"),
                 catalog_client,
                 self.uuid,
@@ -251,7 +248,7 @@ class FeedsUpdateTask(IAsyncTask):
             # log feed sync event
             try:
                 if error:
-                    notify_event(
+                    feeds_module.notify_event(
                         FeedSyncTaskFailed(
                             groups=self.feeds if self.feeds else "all", error=error
                         ),
@@ -259,7 +256,7 @@ class FeedsUpdateTask(IAsyncTask):
                         self.uuid,
                     )
                 else:
-                    notify_event(
+                    feeds_module.notify_event(
                         FeedSyncTaskCompleted(
                             groups=self.feeds if self.feeds else "all"
                         ),

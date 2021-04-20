@@ -18,16 +18,7 @@ from anchore_engine.db import (
     FeedGroupMetadata,
 )
 from anchore_engine.services.policy_engine.engine.feeds import IFeedSource
-from anchore_engine.services.policy_engine.engine.feeds.feeds import (
-    build_feed_sync_results,
-    build_group_sync_result,
-    feed_instance_by_name,
-    notify_event,
-    VulnerabilityFeed,
-    VulnDBFeed,
-    PackagesFeed,
-    NvdV2Feed,
-)
+import anchore_engine.services.policy_engine.engine.feeds.feeds as feeds_module
 from anchore_engine.services.policy_engine.engine.feeds.client import get_client
 from anchore_engine.services.policy_engine.engine.feeds.download import (
     FeedDownloader,
@@ -119,7 +110,10 @@ def get_selected_feeds_to_sync(config):
         ]
     else:
         # Selective disabled... sync only 'vulnerabilities' and 'nvdv2' per semantics in previous version
-        return [VulnerabilityFeed.__feed_name__, NvdV2Feed.__feed_name__]
+        return [
+            feeds_module.VulnerabilityFeed.__feed_name__,
+            feeds_module.NvdV2Feed.__feed_name__,
+        ]
 
 
 class DataFeeds(object):
@@ -137,7 +131,7 @@ class DataFeeds(object):
     def update_counts():
         for feed in get_all_feeds_detached():
             try:
-                f = feed_instance_by_name(feed.name)
+                f = feeds_module.feed_instance_by_name(feed.name)
                 f.update_counts()
             except KeyError:
                 logger.warn(
@@ -325,7 +319,7 @@ class DataFeeds(object):
             raise ValueError("Fetched repo has no download result records")
         else:
             feed_objs = [
-                feed_instance_by_name(f)
+                feeds_module.feed_instance_by_name(f)
                 for f in set(
                     [x.feed for x in fetched_repo.metadata.download_result.results]
                 )
@@ -357,7 +351,9 @@ class DataFeeds(object):
                             f.__feed_name__, operation_id
                         )
                     )
-                    fail_result = build_feed_sync_results(feed=f.__feed_name__)
+                    fail_result = feeds_module.build_feed_sync_results(
+                        feed=f.__feed_name__
+                    )
                     fail_result["total_time_seconds"] = time.time() - t
                     result.append(fail_result)
             except:
@@ -382,12 +378,12 @@ class DataFeeds(object):
         for name, error in failed_tuples:
             try:
                 # Emit the events for a start/stop that failed since without metadata sync we cannot sync the feed reliably
-                notify_event(
+                feeds_module.notify_event(
                     FeedSyncStarted(feed=name),
                     catalog_client,
                     operation_id=operation_id,
                 )
-                notify_event(
+                feeds_module.notify_event(
                     FeedSyncFailed(feed=name, error=error),
                     catalog_client,
                     operation_id=operation_id,
@@ -395,7 +391,9 @@ class DataFeeds(object):
             except:
                 logger.exception("Error emitting feed sync failure events")
             finally:
-                feed_result = build_feed_sync_results(feed=name, status="failure")
+                feed_result = feeds_module.build_feed_sync_results(
+                    feed=name, status="failure"
+                )
                 fail_results.append(feed_result)
 
         return fail_results
@@ -437,7 +435,7 @@ class DataFeeds(object):
         feeds_to_sync = []
         for feed_name in updated_names:
             try:
-                feeds_to_sync.append(feed_instance_by_name(feed_name))
+                feeds_to_sync.append(feeds_module.feed_instance_by_name(feed_name))
             except KeyError as e:
                 logger.error(
                     "Could not initialize metadata for feed {}. Error: No feed implementation found for feed {}. (operation_id={})".format(
@@ -518,14 +516,14 @@ class DataFeeds(object):
         try:
             # Order by feed
             for f in feeds_to_sync:
-                feed_result = build_feed_sync_results(
+                feed_result = feeds_module.build_feed_sync_results(
                     feed=f.__feed_name__, status="failure"
                 )
                 feed_result["status"] = "success"
 
                 try:
                     # Feed level notification and log msg
-                    notify_event(
+                    feeds_module.notify_event(
                         FeedSyncStarted(feed=f.__feed_name__),
                         catalog_client,
                         operation_id=operation_id,
@@ -554,7 +552,7 @@ class DataFeeds(object):
                             "Groups to download {}".format(downloader.config.groups)
                         )
                         try:
-                            notify_event(
+                            feeds_module.notify_event(
                                 FeedGroupSyncStarted(feed=g.feed_name, group=g.name),
                                 catalog_client,
                                 operation_id=operation_id,
@@ -591,7 +589,7 @@ class DataFeeds(object):
                             )
 
                             if group_result["status"] == "success":
-                                notify_event(
+                                feeds_module.notify_event(
                                     FeedGroupSyncCompleted(
                                         feed=f.__feed_name__,
                                         group=g.name,
@@ -603,7 +601,7 @@ class DataFeeds(object):
                             else:
                                 # If any fails, the whole feed is marked as failed
                                 feed_result["status"] = "failure"
-                                notify_event(
+                                feeds_module.notify_event(
                                     FeedGroupSyncFailed(
                                         feed=f.__feed_name__,
                                         group=g.name,
@@ -621,7 +619,7 @@ class DataFeeds(object):
                                     g.feed_name, g.name, operation_id
                                 )
                             )
-                            notify_event(
+                            feeds_module.notify_event(
                                 FeedGroupSyncFailed(
                                     feed=g.feed_name, group=g.name, error=e
                                 ),
@@ -645,13 +643,13 @@ class DataFeeds(object):
                     )
 
                 if feed_result["status"] == "success":
-                    notify_event(
+                    feeds_module.notify_event(
                         FeedSyncCompleted(feed=f.__feed_name__),
                         catalog_client,
                         operation_id,
                     )
                 else:
-                    notify_event(
+                    feeds_module.notify_event(
                         FeedSyncFailed(
                             feed=f.__feed_name__,
                             error="One or more groups failed to sync",
@@ -676,7 +674,7 @@ class DataFeeds(object):
         :return:
         """
 
-        f = feed_instance_by_name(feed_name)
+        f = feeds_module.feed_instance_by_name(feed_name)
         if not f:
             raise KeyError(feed_name)
 
@@ -689,7 +687,7 @@ class DataFeeds(object):
         :param feed_name:
         :return:
         """
-        f = feed_instance_by_name(feed_name)
+        f = feeds_module.feed_instance_by_name(feed_name)
         if not f:
             raise KeyError(feed_name)
 
@@ -722,13 +720,13 @@ def _sync_order(feed_name: str) -> int:
 
     # Later will want to generalize this and add sync order as property of the feed class
 
-    if feed_name == VulnerabilityFeed.__feed_name__:
+    if feed_name == feeds_module.VulnerabilityFeed.__feed_name__:
         return 0
-    if feed_name == VulnDBFeed.__feed_name__:
+    if feed_name == feeds_module.VulnDBFeed.__feed_name__:
         return 10
-    if feed_name == NvdV2Feed.__feed_name__:
+    if feed_name == feeds_module.NvdV2Feed.__feed_name__:
         return 50
-    if feed_name == PackagesFeed.__feed_name__:
+    if feed_name == feeds_module.PackagesFeed.__feed_name__:
         return 100
     else:
         # Anything else is less than packages but more than the vuln-related
