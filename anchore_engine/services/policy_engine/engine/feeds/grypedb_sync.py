@@ -1,4 +1,5 @@
 import threading
+from dataclasses import dataclass
 from types import TracebackType
 from typing import Iterable, Optional, Type
 
@@ -44,7 +45,7 @@ class GrypeDBSyncLock:
     def __enter__(self) -> None:
         self.lock_acquired = self._lock.acquire(timeout=self.timeout)
         if not self.lock_acquired:
-            raise GrypeDBSyncLockAquisitionTimeout
+            raise GrypeDBSyncLockAquisitionTimeout(self.timeout)
 
     def __exit__(
         self,
@@ -61,8 +62,15 @@ class GrypeDBSyncManager:
     Sync grype db to local instance of policy engine if it has been updated globally
     """
 
+    lock = threading.Lock()
+
+    @dataclass
+    class SyncNecessaryResp:
+        sync_necessary: bool
+        active_grypedb: Optional[GrypeDBMetadata] = None
+
     @classmethod
-    def get_active_grypedb(cls) -> Optional[GrypeDBMetadata]:
+    def _get_active_grypedb(cls) -> Optional[GrypeDBMetadata]:
         """
         Returns active grybdb instance from db. Returns None if there are none and raises exception if more than one
 
@@ -91,7 +99,7 @@ class GrypeDBSyncManager:
         return db.query(GrypeDBMetadata).filter(GrypeDBMetadata.active == True).all()
 
     @classmethod
-    def get_local_grypedb_checksum(cls) -> str:
+    def _get_local_grypedb_checksum(cls) -> str:
         """
         Returns checksum of grypedb on local instance
 
@@ -102,7 +110,21 @@ class GrypeDBSyncManager:
         return grype_wrapper.get_current_grype_db_checksum()
 
     @classmethod
-    def update_grypedb(
+    def _check_sync_necessary(cls):
+        active_grypedb = cls._get_active_grypedb()
+        if not active_grypedb:
+            logger.info("No active grypedb available in the system to sync")
+            return cls.SyncNecessaryResp(False)
+
+        local_grypedb_checksum = cls._get_local_grypedb_checksum()
+
+        sync_needed = local_grypedb_checksum != active_grypedb.checksum
+        logger.info("No grypedb sync needed at this time")
+
+        return cls.SyncNecessaryResp(sync_needed, active_grypedb)
+
+    @classmethod
+    def _update_grypedb(
         cls,
         active_grypedb: GrypeDBMetadata,
         grypedb_file_path: Optional[str] = None,
@@ -145,22 +167,21 @@ class GrypeDBSyncManager:
         rtype: bool
         """
         try:
+            # Do an initial check outside of lock to determine if sync is necessary
+            # Helps ensure that synchronous processes are slowed by lock
+            if not cls._check_sync_necessary().sync_necessary:
+                return False
+
             with GrypeDBSyncLock(LOCK_AQUISITION_TIMEOUT):
-                active_grypedb = cls.get_active_grypedb()
-                if not active_grypedb:
-                    logger.info("No active grypedb available in the system to sync")
-                    return False
+                sync_necessary_resp = cls._check_sync_necessary()
 
-                local_grypedb_checksum = cls.get_local_grypedb_checksum()
-
-                if local_grypedb_checksum != active_grypedb.checksum:
-                    cls.update_grypedb(
-                        active_grypedb=active_grypedb,
+                if sync_necessary_resp.sync_necessary:
+                    cls._update_grypedb(
+                        active_grypedb=sync_necessary_resp.active_grypedb,
                         grypedb_file_path=grypedb_file_path,
                     )
                     return True
                 else:
-                    logger.info("No grypedb sync needed at this time")
                     return False
         except GrypeDBSyncError as e:
             logger.exception("Error executing grypedb sync task {}".format(str(e)))
