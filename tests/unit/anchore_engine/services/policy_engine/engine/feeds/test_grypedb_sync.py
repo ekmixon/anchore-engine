@@ -6,6 +6,7 @@ import pytest
 
 from anchore_engine.db import GrypeDBMetadata
 from anchore_engine.services.policy_engine.engine.feeds.grypedb_sync import (
+    GrypeDBSyncLock,
     GrypeDBSyncManager,
     TooManyActiveGrypeDBs,
 )
@@ -107,7 +108,7 @@ class TestGrypeDBSyncTask:
         """
         checksum = "366ab0a94f4ed9c22f5cc93e4d8f6724163a357ae5190740c1b5f251fd706cc4"
         mock_lock = MagicMock()
-        GrypeDBSyncManager.lock = mock_lock
+        GrypeDBSyncLock._lock = mock_lock
         mock_calls_for_sync(
             mock_active_dbs=[GrypeDBMetadata(checksum=checksum)],
             mock_local_checksum=checksum,
@@ -118,8 +119,8 @@ class TestGrypeDBSyncTask:
         )
 
         assert not sync_ran
-        assert mock_lock.__enter__.called
-        assert mock_lock.__exit__.called
+        assert mock_lock.acquire.called
+        assert mock_lock.release.called
 
     def test_lock_across_threads(self, mock_calls_for_sync):
         """
@@ -163,7 +164,7 @@ class TestGrypeDBSyncTask:
         # Wait until thread1 has taken the lock and then run thread2 with timeout of ~5 seconds
         synchronous_task = False
         for attempt in range(5):
-            if GrypeDBSyncManager.lock.locked():
+            if GrypeDBSyncLock._lock.locked():
                 synchronous_task = GrypeDBSyncManager.run_grypedb_sync(
                     grypedb_file_path="test/bypass/catalog.txt"
                 )

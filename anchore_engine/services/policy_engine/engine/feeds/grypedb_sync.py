@@ -1,6 +1,8 @@
 import threading
-from typing import Iterable, Optional
+from types import TracebackType
+from typing import Iterable, Optional, Type
 
+from anchore_engine.clients import grype_wrapper
 from anchore_engine.clients.services import internal_client_for
 from anchore_engine.clients.services.catalog import CatalogClient
 from anchore_engine.db import GrypeDBMetadata, get_thread_scoped_session
@@ -9,7 +11,8 @@ from anchore_engine.services.policy_engine.engine.feeds.storage import (
     GrypeDBStorage,
 )
 from anchore_engine.subsys import logger
-from anchore_engine.clients import grype_wrapper
+
+LOCK_AQUISITION_TIMEOUT = 10
 
 
 class GrypeDBSyncError(Exception):
@@ -23,12 +26,40 @@ class TooManyActiveGrypeDBs(GrypeDBSyncError):
         )
 
 
+class GrypeDBSyncLockAquisitionTimeout(GrypeDBSyncError):
+    def __init__(self, timeout_seconds: int):
+        self.timeout_seconds = timeout_seconds
+        super().__init__(
+            f"Aquisition timeout of {self.timeout_seconds} seconds encountered before lock was released. Potential deadlock in system."
+        )
+
+
+class GrypeDBSyncLock:
+    _lock = threading.Lock()
+
+    def __init__(self, timeout: int) -> None:
+        self.timeout = timeout
+        self.lock_acquired: bool = False
+
+    def __enter__(self) -> None:
+        self.lock_acquired = self._lock.acquire(timeout=self.timeout)
+        if not self.lock_acquired:
+            raise GrypeDBSyncLockAquisitionTimeout
+
+    def __exit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_value: Optional[BaseException],
+        traceback: Optional[TracebackType],
+    ) -> None:
+        if self.lock_acquired:
+            self._lock.release()
+
+
 class GrypeDBSyncManager:
     """
     Sync grype db to local instance of policy engine if it has been updated globally
     """
-
-    lock = threading.Lock()
 
     @classmethod
     def get_active_grypedb(cls) -> Optional[GrypeDBMetadata]:
@@ -114,7 +145,7 @@ class GrypeDBSyncManager:
         rtype: bool
         """
         try:
-            with cls.lock:
+            with GrypeDBSyncLock(LOCK_AQUISITION_TIMEOUT):
                 active_grypedb = cls.get_active_grypedb()
                 if not active_grypedb:
                     logger.info("No active grypedb available in the system to sync")
