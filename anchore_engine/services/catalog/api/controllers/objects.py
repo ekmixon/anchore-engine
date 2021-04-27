@@ -6,10 +6,10 @@ Simple get/post/delete api for unstructured data and json data storage
 """
 
 import json
+
 import anchore_engine.apis
 import anchore_engine.services
 import anchore_engine.subsys.object_store.manager
-
 from anchore_engine import utils as anchore_utils
 from anchore_engine.apis.authorization import INTERNAL_SERVICE_ALLOWED, get_authorizer
 from anchore_engine.apis.context import ApiRequestContextProxy
@@ -99,36 +99,38 @@ def delete_object(bucket, archiveid):
 @flask_metrics.do_not_track()
 @authorizer.requires_account(with_types=INTERNAL_SERVICE_ALLOWED)
 def create_raw_object(bucket, archiveid, bodycontent):
-    httpcode = 500
+    http_code = 500
+    account_name = ApiRequestContextProxy.namespace()
     try:
-        account_name = ApiRequestContextProxy.namespace()
         obj_mgr = anchore_engine.subsys.object_store.manager.get_manager()
-
         obj_mgr.put(account_name, bucket, archiveid, bodycontent)
-
-        my_svc = ApiRequestContextProxy.get_service()
-        if my_svc is not None:
-            resource_url = (
-                my_svc.service_record["base_url"]
-                + "/"
-                + my_svc.service_record["version"]
-                + "/archive/"
-                + bucket
-                + "/"
-                + archiveid
-            )
-        else:
-            resource_url = "N/A"
-
-        return_object = resource_url
-        httpcode = 200
-
     except Exception as err:
         return_object = anchore_engine.common.helpers.make_response_error(
-            err, in_httpcode=httpcode
+            err, in_httpcode=http_code
         )
+        return return_object, http_code
 
-    return return_object, httpcode
+    my_svc = ApiRequestContextProxy.get_service()
+    if my_svc is None:
+        resource_url = "N/A"
+    else:
+        try:
+            path_parts = [
+                my_svc.service_record["base_url"],
+                my_svc.service_record["version"],
+                "archive",
+                bucket,
+                archiveid,
+            ]
+        except KeyError as err:
+            return_object = anchore_engine.common.helpers.make_response_error(
+                err, in_httpcode=http_code
+            )
+            return return_object, http_code
+        resource_url = "/".join(path_parts)
+    return_object = resource_url
+    http_code = 200
+    return return_object, http_code
 
 
 @flask_metrics.do_not_track()
