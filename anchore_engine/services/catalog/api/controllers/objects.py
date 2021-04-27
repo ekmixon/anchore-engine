@@ -136,21 +136,19 @@ def create_raw_object(bucket, archiveid, bodycontent):
 @flask_metrics.do_not_track()
 @authorizer.requires_account(with_types=INTERNAL_SERVICE_ALLOWED)
 def get_raw_object(bucket, archiveid):
-    httpcode = 500
+    http_code = 200
     try:
         obj_mgr = anchore_engine.subsys.object_store.manager.get_manager()
         account_name = ApiRequestContextProxy.namespace()
-        try:
-            return_object = obj_mgr.get(account_name, bucket, archiveid)
-            if not return_object:
-                raise TypeError("No document found at given path")
-            httpcode = 200
-        except Exception as err:
-            httpcode = 404
-            raise err
+        return_object = obj_mgr.get(account_name, bucket, archiveid)
+        if not return_object:
+            http_code = 404
+            return_object = anchore_engine.common.helpers.make_response_error(
+                "No document found at given path", in_httpcode=http_code
+            )
     except Exception as err:
+        http_code = 500
         return_object = anchore_engine.common.helpers.make_response_error(
-            err, in_httpcode=httpcode
+            err, in_httpcode=http_code
         )
-
-    return return_object, httpcode
+    return return_object, http_code
