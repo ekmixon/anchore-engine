@@ -154,7 +154,9 @@ class FileListIterator(object):
     def __init__(
         self, ordered_path_list: list, group_metadata: Dict[str, Dict[str, str]]
     ):
-        self.files = ordered_path_list
+        self.files = [
+            file_path for file_path in ordered_path_list if os.path.isfile(file_path)
+        ]
         self.file_metadata = group_metadata
         self.current_file_index = 0
 
