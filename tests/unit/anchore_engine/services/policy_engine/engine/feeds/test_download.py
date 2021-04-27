@@ -4,6 +4,7 @@ Tests the feed data fetcher
 import datetime
 import json
 import os
+import shutil
 import tempfile
 from os import path
 from typing import Callable
@@ -110,7 +111,133 @@ def feed_json_file_array():
     return files
 
 
+@pytest.fixture
+def get_tmpdir(request) -> str:
+    tmpdir = tempfile.mkdtemp(prefix="anchoretest_repo-")
+
+    def remove_tmpdir() -> None:
+        try:
+            shutil.rmtree(tmpdir)
+        except FileNotFoundError:
+            pass
+
+    request.addfinalizer(remove_tmpdir)
+
+    return tmpdir
+
+
 class TestLocalFeedDataRepo:
+    def test_initialize(self, get_tmpdir):
+        tmpdir = get_tmpdir
+        r = LocalFeedDataRepo(metadata=LocalFeedDataRepoMetadata(data_write_dir=tmpdir))
+        assert os.listdir(tmpdir) == []
+        r.initialize()
+        assert os.listdir(tmpdir) == ["metadata.json"]
+
+    def test_metadata_flush_reload(self, get_tmpdir):
+        tmpdir = get_tmpdir
+        r = LocalFeedDataRepo(metadata=LocalFeedDataRepoMetadata(data_write_dir=tmpdir))
+        r.initialize()
+        ts = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
+        r.metadata.download_result = DownloadOperationResult(
+            started=ts, status=FeedDownloader.State.in_progress.value, results=[]
+        )
+        r.flush_metadata()
+        r.metadata = None
+        r.reload_metadata()
+        assert r.metadata.download_result.started == ts
+        assert (
+            r.metadata.download_result.status == FeedDownloader.State.in_progress.value
+        )
+
+    def test_write_read_records(self, get_tmpdir):
+        tmpdir = get_tmpdir
+        r = LocalFeedDataRepo(metadata=LocalFeedDataRepoMetadata(data_write_dir=tmpdir))
+        r.initialize()
+        ts = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
+        r.metadata.download_result = DownloadOperationResult(
+            started=ts, status=FeedDownloader.State.in_progress.value, results=[]
+        )
+
+        r.write_data(
+            "feed1",
+            "group1",
+            chunk_id=0,
+            data=b'{"next_token": "something", "data": [{"somekey": "somevalue"}]}',
+        )
+        with timer("Read single record group", log_level="info"):
+            found_count = 0
+            for i in r.read("feed1", "group1", start_index=0):
+                logger.info("Got record {}".format(i))
+                found_count += 1
+        logger.info("Repo metadata: {}".format(r.metadata))
+        assert found_count > 0
+
+    def test_write_read_files(self, get_tmpdir, get_file):
+        """
+        Test writing chunks of binary data to LocalFeedDataRepo and reading using LocalFeedDataRepo.read_files()
+        """
+        tmpdir = get_tmpdir
+        r = LocalFeedDataRepo(metadata=LocalFeedDataRepoMetadata(data_write_dir=tmpdir))
+        r.initialize()
+        ts = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
+        meta = GroupDownloadResult(
+            feed="feed1",
+            group="group1",
+            total_records=0,
+            status=FeedDownloader.State.in_progress.value,
+            started=datetime.datetime.utcnow(),
+            group_metadata={},
+        )
+        r.metadata.download_result = DownloadOperationResult(
+            started=ts,
+            status=FeedDownloader.State.in_progress.value,
+            results=[meta],
+        )
+        expected_output = []
+        for chunk_number in range(2):
+            with open(get_file(f"{chunk_number}.data"), "rb") as f:
+                binary_content = f.read()
+                expected_output.append(binary_content)
+            group_metadata = {str(chunk_number): {"test_value": str(chunk_number)}}
+            r.write_data(
+                "feed1",
+                "group1",
+                chunk_id=chunk_number,
+                data=binary_content,
+            )
+            meta.total_records += 1
+            meta.group_metadata.update(group_metadata)
+        meta.status = FeedDownloader.State.complete.value
+        meta.ended = datetime.datetime.utcnow()
+        r.flush_metadata()
+        r.reload_metadata()
+        assert r.metadata.download_result.results[0].total_records == 2
+        assert all(
+            [
+                x in r.metadata.download_result.results[0].group_metadata
+                for x in ["0", "1"]
+            ]
+        )
+        found_count = 0
+        for idx, file_data in enumerate(r.read_files("feed1", "group1")):
+            found_count += 1
+            assert isinstance(file_data, FileData)
+            assert file_data.data == expected_output[idx]
+            assert str(idx) in meta.group_metadata
+            assert file_data.metadata["test_value"] == str(idx)
+        assert found_count == 2
+
+    def test_teardown(self, get_tmpdir):
+        tmpdir = get_tmpdir
+        r = LocalFeedDataRepo(metadata=LocalFeedDataRepoMetadata(data_write_dir=tmpdir))
+        r.initialize()
+        assert os.path.isdir(tmpdir) is True
+        r.teardown()
+        assert os.path.isdir(tmpdir) is False
+
+
+class TestIterators:
     def test_file_iterator(self, feed_json_file):
         counter = 0
         with FeedDataFileJsonIterator(feed_json_file.name) as jsonitr:
@@ -134,107 +261,6 @@ class TestLocalFeedDataRepo:
         # Cleanup
         for f in feed_json_file_array:
             f.close()
-
-    def test_local_feed_data_repo(self):
-        tmpdir = tempfile.mkdtemp(prefix="anchoretest_repo-")
-        r = LocalFeedDataRepo(metadata=LocalFeedDataRepoMetadata(data_write_dir=tmpdir))
-        try:
-            assert os.listdir(tmpdir) == []
-
-            r.initialize()
-            assert os.listdir(tmpdir) == ["metadata.json"]
-            ts = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
-            r.metadata.download_result = DownloadOperationResult(
-                started=ts, status=FeedDownloader.State.in_progress.value, results=[]
-            )
-            r.flush_metadata()
-            r.metadata = None
-            r.reload_metadata()
-            assert r.metadata.download_result.started == ts
-            assert (
-                r.metadata.download_result.status
-                == FeedDownloader.State.in_progress.value
-            )
-
-            r.write_data(
-                "feed1",
-                "group1",
-                chunk_id=0,
-                data=b'{"next_token": "something", "data": [{"somekey": "somevalue"}]}',
-            )
-
-            with timer("Read single record group", log_level="info"):
-                found_count = 0
-                for i in r.read("feed1", "group1", start_index=0):
-                    logger.info("Got record {}".format(i))
-                    found_count += 1
-
-            logger.info("Repo metadata: {}".format(r.metadata))
-
-            assert found_count > 0
-
-        finally:
-            logger.info("Done with repo test")
-            r.teardown()
-
-    def test_local_feed_data_repo_read_files(self, get_file):
-        """
-        Test writing chunks of binary data to LocalFeedDataRepo and reading using LocalFeedDataRepo.read_files()
-        """
-        tmpdir = tempfile.mkdtemp(prefix="anchoretest_repo-")
-        r = LocalFeedDataRepo(metadata=LocalFeedDataRepoMetadata(data_write_dir=tmpdir))
-        try:
-            r.initialize()
-            ts = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
-            meta = GroupDownloadResult(
-                feed="feed1",
-                group="group1",
-                total_records=0,
-                status=FeedDownloader.State.in_progress.value,
-                started=datetime.datetime.utcnow(),
-                group_metadata={},
-            )
-            r.metadata.download_result = DownloadOperationResult(
-                started=ts,
-                status=FeedDownloader.State.in_progress.value,
-                results=[meta],
-            )
-            expected_output = []
-            for chunk_number in range(2):
-                with open(get_file(f"{chunk_number}.data"), "rb") as f:
-                    binary_content = f.read()
-                    expected_output.append(binary_content)
-                group_metadata = {str(chunk_number): {"test_value": str(chunk_number)}}
-                r.write_data(
-                    "feed1",
-                    "group1",
-                    chunk_id=chunk_number,
-                    data=binary_content,
-                )
-                meta.total_records += 1
-                meta.group_metadata.update(group_metadata)
-            meta.status = FeedDownloader.State.complete.value
-            meta.ended = datetime.datetime.utcnow()
-            r.flush_metadata()
-            r.metadata = None
-            r.reload_metadata()
-            assert r.metadata.download_result.results[0].total_records == 2
-            assert all(
-                [
-                    x in r.metadata.download_result.results[0].group_metadata
-                    for x in ["0", "1"]
-                ]
-            )
-            found_count = 0
-            for idx, file_data in enumerate(r.read_files("feed1", "group1")):
-                found_count += 1
-                assert isinstance(file_data, FileData)
-                assert file_data.data == expected_output[idx]
-                assert str(idx) in meta.group_metadata
-                assert file_data.metadata["test_value"] == str(idx)
-            assert found_count == 2
-        finally:
-            r.teardown()
 
     def test_file_list_iterator(self, get_file):
         file_paths = []
