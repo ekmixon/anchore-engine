@@ -756,6 +756,21 @@ class GrypeDBFeed(AnchoreServiceFeed):
         )
         db.add(grypedb_meta)
 
+    def _run_grypedb_sync_task(self, checksum: str, grype_db_data: bytes) -> None:
+        """
+        Write the Grype DB to a tar.gz in a temporary directory and pass to GrypeDBSyncManager.
+        The GrypeDBSyncManager updates the working copy of GrypeDB on this instance of policy engine.
+
+        :param checksum: grype DB file checksum
+        :type checksum: str
+        :param grype_db_data: raw tar.gz file data
+        :type grype_db_data: bytes
+        """
+        with GrypeDBStorage() as grypedb_file:
+            with grypedb_file.create_file(checksum) as f:
+                f.write(grype_db_data)
+            GrypeDBSyncManager.run_grypedb_sync(grypedb_file.path)
+
     def _sync_group(
         self,
         group_download_result: GroupDownloadResult,
@@ -831,33 +846,38 @@ class GrypeDBFeed(AnchoreServiceFeed):
             for record in local_repo.read_files(
                 group_download_result.feed, group_download_result.group
             ):
+                # If we go through two files, then that means the feed service provided two GrypeDB files.
+                # This is an unexpected condition.
                 if total_updated_count >= 1:
                     raise UnexpectedRawGrypeDBFile()
+                # Check that the data that we downloaded matches the checksum provided
                 checksum = record.metadata["Checksum"]
                 GrypeDBFile.verify_integrity(record.data, checksum)
+                # If there aren't any other database files with the same checksum, then this is a new database file.
                 if self._find_match(db, checksum).count() == 0:
+                    # Update the database and the catalog with the new Grype DB file.
                     self._switch_active_grypedb(
                         db,
                         group_download_result,
                         record,
                         checksum,
                     )
-                    # cache to temporary storage
-                    with GrypeDBStorage() as grypedb_file:
-                        with grypedb_file.create_file(checksum) as f:
-                            f.write(record.data)
-                        # even if the GrypeDBSyncTask fails, we still want the FeedSync to succeed.
-                        try:
-                            GrypeDBSyncManager.run_grypedb_sync(grypedb_file.path)
-                        except GrypeDBSyncError as e:
-                            logger.exception(
-                                log_msg_ctx(
-                                    operation_id,
-                                    group_download_result.feed,
-                                    group_download_result.group,
-                                    "Error running GrypeDBSyncTask. Working copy of GrypeDB could not be updated.",
-                                )
+                    # Cache the file to temporary storage and call GrypeDBSyncTask
+                    # GrypeDBSyncTask swaps out working Grype DB on this instance of policy engine
+                    # Even if the GrypeDBSyncTask fails, we still want the FeedSync to succeed.
+                    # The GrypeDBSyncTask is also registered to a watcher, so it will try to sync again later.
+                    try:
+                        self._run_grypedb_sync_task(checksum, record.data)
+                    except GrypeDBSyncError as e:
+                        logger.exception(
+                            log_msg_ctx(
+                                operation_id,
+                                group_download_result.feed,
+                                group_download_result.group,
+                                "Error running GrypeDBSyncTask. Working copy of GrypeDB could not be updated.",
                             )
+                        )
+                    # Update number of records processed
                     total_updated_count += 1
                     logger.info(
                         log_msg_ctx(
