@@ -368,6 +368,7 @@ def handle_grypedb_sync(*args, **kwargs):
         GrypeDBSyncError,
     )
 
+    logger.info("searchthis Triggering handler for grypedbsync task")
     system_user = _system_creds()
 
     logger.info("init args: {}".format(kwargs))
@@ -379,8 +380,10 @@ def handle_grypedb_sync(*args, **kwargs):
 
             if result:
                 logger.info("Grype DB synced to local instance via handler")
-        except GrypeDBSyncError:
-            logger.exception("Caught escaped error in grype db sync")
+        except Exception:
+            logger.exception(
+                "Error encountered when running GrypeDBSyncTask from async monitor"
+            )
         time.sleep(cycle_time)
     return True
 
