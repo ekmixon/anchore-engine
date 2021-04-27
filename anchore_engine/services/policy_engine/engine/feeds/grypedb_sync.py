@@ -165,23 +165,19 @@ class GrypeDBSyncManager:
         return: Boolean to whether the db was updated or not
         rtype: bool
         """
-        try:
-            # Do an initial check outside of lock to determine if sync is necessary
-            # Helps ensure that synchronous processes are slowed by lock
-            if not cls._check_sync_necessary().sync_necessary:
+        # Do an initial check outside of lock to determine if sync is necessary
+        # Helps ensure that synchronous processes are slowed by lock
+        if not cls._check_sync_necessary().sync_necessary:
+            return False
+
+        with GrypeDBSyncLock(LOCK_AQUISITION_TIMEOUT):
+            sync_necessary_resp = cls._check_sync_necessary()
+
+            if sync_necessary_resp.sync_necessary:
+                cls._update_grypedb(
+                    active_grypedb=sync_necessary_resp.active_grypedb,
+                    grypedb_file_path=grypedb_file_path,
+                )
+                return True
+            else:
                 return False
-
-            with GrypeDBSyncLock(LOCK_AQUISITION_TIMEOUT):
-                sync_necessary_resp = cls._check_sync_necessary()
-
-                if sync_necessary_resp.sync_necessary:
-                    cls._update_grypedb(
-                        active_grypedb=sync_necessary_resp.active_grypedb,
-                        grypedb_file_path=grypedb_file_path,
-                    )
-                    return True
-                else:
-                    return False
-        except GrypeDBSyncError as e:
-            logger.exception("Error executing grypedb sync task {}".format(str(e)))
-            raise
