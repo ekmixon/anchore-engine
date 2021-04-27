@@ -288,7 +288,7 @@ class InternalServiceClient(object):
             log_body = (
                 ensure_str(body[:512]) + "..." if body and len(body) > 512 else body
             )
-        except UnicodeError as e:
+        except UnicodeError:
             log_body = "Unable to decode body for logging"
 
         logger.debug(
