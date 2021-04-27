@@ -16,15 +16,18 @@ test_params = [
 @pytest.mark.incremental
 @pytest.mark.parametrize("bucket,archive_id, filename", test_params)
 class TestObjectsRaw:
-    @pytest.fixture(scope="class", autouse=True)
-    def setup_and_teardown_tests(self, request):
-        def _cleanup():
-            for params in test_params:
-                objects.delete_document(params[0], params[1])
+    @classmethod
+    def _cleanup(cls):
+        for params in test_params:
+            objects.delete_document(params[0], params[1])
 
-        _cleanup()
+    @classmethod
+    def setUpClass(cls):
+        cls._cleanup()
 
-        request.addfinalizer(_cleanup)
+    @classmethod
+    def tearDownClass(cls):
+        cls._cleanup()
 
     @pytest.fixture
     def post_raw_document(self, request, expected_content):
