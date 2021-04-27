@@ -741,7 +741,7 @@ class GrypeDBFeed(AnchoreServiceFeed):
             {GrypeDBMetadata.active: False}, synchronize_session="evaluate"
         )
         # insert new as active
-        catalog_client.create_raw_document(
+        object_url = catalog_client.create_raw_document(
             group_download_result.group, checksum, record.data
         )
         date_generated = rfc3339str_to_datetime(record.metadata["Date-Created"])
@@ -750,8 +750,7 @@ class GrypeDBFeed(AnchoreServiceFeed):
             feed_name=GrypeDBFeed.__feed_name__,
             group_name=group_download_result.group,
             date_generated=date_generated,
-            bucket=group_download_result.group,
-            archive_id=checksum,
+            object_url=object_url,
             active=True,
         )
         db.add(grypedb_meta)
