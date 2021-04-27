@@ -87,7 +87,7 @@ class TestGrypeDBSyncTask:
         )
         result = GrypeDBSyncManager.run_grypedb_sync()
 
-        assert not result
+        assert result is False
 
     def test_too_many_active_grypedbs(self, mock_query_active_dbs_with_data):
         active_dbs = [GrypeDBMetadata(active=True), GrypeDBMetadata(active=True)]
@@ -105,7 +105,7 @@ class TestGrypeDBSyncTask:
 
         sync_ran = GrypeDBSyncManager.run_grypedb_sync()
 
-        assert not sync_ran
+        assert sync_ran is False
 
     def test_mismatch_checksum(self, mock_calls_for_sync):
         global_checksum = (
@@ -128,7 +128,7 @@ class TestGrypeDBSyncTask:
             grypedb_file_path="test/bypass/catalog.txt"
         )
 
-        assert sync_ran
+        assert sync_ran is True
 
     def test_lock_across_threads(self, setup_for_thread_testing):
         """
@@ -160,9 +160,9 @@ class TestGrypeDBSyncTask:
                 else:
                     time.sleep(1)
 
-            assert thread1.result() == True
-            assert lock_acquired
-            assert synchronous_task == False
+            assert thread1.result() is True
+            assert lock_acquired is True
+            assert synchronous_task is False
 
     @patch(
         "anchore_engine.services.policy_engine.engine.feeds.grypedb_sync.LOCK_AQUISITION_TIMEOUT",
@@ -194,5 +194,5 @@ class TestGrypeDBSyncTask:
                 else:
                     time.sleep(1)
 
-            assert thread1.result() == True
-            assert lock_acquired
+            assert thread1.result() is True
+            assert lock_acquired is True

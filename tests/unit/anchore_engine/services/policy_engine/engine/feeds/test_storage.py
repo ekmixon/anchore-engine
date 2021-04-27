@@ -29,9 +29,9 @@ class TestStorage:
         """
         with GrypeDBStorage() as grypedb_file:
             directory_path = grypedb_file.root_directory
-            assert os.path.exists(directory_path)
+            assert os.path.exists(directory_path) is True
 
-        assert not os.path.exists(directory_path)
+        assert os.path.exists(directory_path) is False
 
     def test_file_creation_and_cleanup(self):
         """
@@ -41,9 +41,9 @@ class TestStorage:
             with grypedb_file.create_file(test_data_checksum) as f:
                 f.write(test_data)
             file_path = grypedb_file._file_path
-            assert os.path.exists(file_path)
+            assert os.path.exists(file_path) is True
 
-        assert not os.path.exists(file_path)
+        assert os.path.exists(file_path) is False
 
     def test_verify_integrity_on_file_creation(self):
         """
