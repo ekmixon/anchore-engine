@@ -12,44 +12,41 @@ import time
 import uuid
 
 from anchore_engine.clients.services.catalog import CatalogClient
-from anchore_engine.db import (
-    get_thread_scoped_session as get_session,
-    FeedMetadata,
-    FeedGroupMetadata,
+from anchore_engine.common.schemas import (
+    DownloadOperationConfiguration,
+    GroupDownloadOperationConfiguration,
+    GroupDownloadOperationParams,
 )
+from anchore_engine.configuration import localconfig
+from anchore_engine.db import FeedGroupMetadata, FeedMetadata
+from anchore_engine.db import get_thread_scoped_session as get_session
 from anchore_engine.services.policy_engine.engine.feeds import IFeedSource
-from anchore_engine.services.policy_engine.engine.feeds.feeds import (
-    build_feed_sync_results,
-    feed_instance_by_name,
-    VulnerabilityFeed,
-    VulnDBFeed,
-    PackagesFeed,
-    NvdV2Feed,
-)
 from anchore_engine.services.policy_engine.engine.feeds.client import get_client
-from anchore_engine.services.policy_engine.engine.feeds.download import (
-    FeedDownloader,
-    LocalFeedDataRepo,
-)
 from anchore_engine.services.policy_engine.engine.feeds.db import (
     get_all_feeds,
     get_all_feeds_detached,
 )
+from anchore_engine.services.policy_engine.engine.feeds.download import (
+    FeedDownloader,
+    LocalFeedDataRepo,
+)
+from anchore_engine.services.policy_engine.engine.feeds.feeds import (
+    NvdV2Feed,
+    PackagesFeed,
+    VulnDBFeed,
+    VulnerabilityFeed,
+    build_feed_sync_results,
+    feed_instance_by_name,
+)
+from anchore_engine.subsys import logger
 from anchore_engine.subsys.events import (
-    FeedSyncStarted,
-    FeedSyncFailed,
-    FeedSyncCompleted,
-    FeedGroupSyncStarted,
+    EventBase,
     FeedGroupSyncCompleted,
     FeedGroupSyncFailed,
-    EventBase,
-)
-from anchore_engine.configuration import localconfig
-from anchore_engine.subsys import logger
-from anchore_engine.common.schemas import (
-    GroupDownloadOperationParams,
-    GroupDownloadOperationConfiguration,
-    DownloadOperationConfiguration,
+    FeedGroupSyncStarted,
+    FeedSyncCompleted,
+    FeedSyncFailed,
+    FeedSyncStarted,
 )
 
 
@@ -747,5 +744,5 @@ def notify_event(event: EventBase, client: CatalogClient, operation_id=None):
 
     try:
         logger.info("Event: {} (operation_id={})".format(event.to_json(), operation_id))
-    except:
+    except TypeError:
         logger.exception("Error logging event")
