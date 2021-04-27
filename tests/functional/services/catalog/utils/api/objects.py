@@ -84,7 +84,6 @@ def get_raw_document(bucket: str, archiveid: str) -> http_utils.APIResponse:
         ["objects", "raw", bucket, archiveid],
         config=catalog_api_conf,
         extra_headers={"Content-Type": "application/octet-stream"},
-        binary=True,
     )
 
     if get_document_resp.code != 200:
