@@ -15,26 +15,32 @@ from anchore_engine.services.policy_engine.engine.feeds.grypedb_sync import (
 
 class TestGrypeDBSyncTask:
     @pytest.fixture
-    def mock_query_active_dbs_with_data(self):
+    def mock_query_active_dbs_with_data(self, monkeypatch):
         """
         Creates factory that will mock _query_active_dbs return with params passed
         """
 
         def _mock_query(mocked_output):
-            mock_active_dbs = Mock(return_value=mocked_output)
-            GrypeDBSyncManager._query_active_dbs = mock_active_dbs
+            monkeypatch.setattr(
+                GrypeDBSyncManager,
+                "_query_active_dbs",
+                Mock(return_value=mocked_output),
+            )
 
         return _mock_query
 
     @pytest.fixture
-    def mock_get_local_grypedb_checksum(self):
+    def mock_get_local_grypedb_checksum(self, monkeypatch):
         """
         Creates factory that will mock _query_active_dbs return with params passed
         """
 
         def _mock_query(mocked_output):
-            mock_checksum = Mock(return_value=mocked_output)
-            GrypeDBSyncManager._get_local_grypedb_checksum = mock_checksum
+            monkeypatch.setattr(
+                GrypeDBSyncManager,
+                "_get_local_grypedb_checksum",
+                Mock(return_value=mocked_output),
+            )
 
         return _mock_query
 
@@ -53,7 +59,7 @@ class TestGrypeDBSyncTask:
         return _mock
 
     @pytest.fixture
-    def setup_for_thread_testing(self, mock_calls_for_sync):
+    def setup_for_thread_testing(self, mock_calls_for_sync, monkeypatch):
         """
         2 tests that run tests for threads and locking use the same mock data captured in this fixture
         """
@@ -78,7 +84,9 @@ class TestGrypeDBSyncTask:
             # This in effect mocks the actual execution for the first thread
             mock_calls_for_sync([GrypeDBMetadata(checksum=new_checksum)], new_checksum)
 
-        GrypeDBSyncManager._update_grypedb = _mock_update_grypedb_for_thread1
+        monkeypatch.setattr(
+            GrypeDBSyncManager, "_update_grypedb", _mock_update_grypedb_for_thread1
+        )
 
     def test_no_active_grypedb(self, mock_calls_for_sync):
         mock_calls_for_sync(
@@ -107,7 +115,7 @@ class TestGrypeDBSyncTask:
 
         assert sync_ran is False
 
-    def test_mismatch_checksum(self, mock_calls_for_sync):
+    def test_mismatch_checksum(self, mock_calls_for_sync, monkeypatch):
         global_checksum = (
             "eef3b1bcd5728346cb1b30eae09647348bacfbde3ba225d70cb0374da249277c"
         )
@@ -121,7 +129,9 @@ class TestGrypeDBSyncTask:
         )
 
         # mock execution of update
-        GrypeDBSyncManager._update_grypedb = Mock(return_value=True)
+        monkeypatch.setattr(
+            GrypeDBSyncManager, "_update_grypedb", Mock(return_value=True)
+        )
 
         # pass a file path to bypass connection to catalog to retrieve tar from object storage
         sync_ran = GrypeDBSyncManager.run_grypedb_sync(
@@ -129,6 +139,31 @@ class TestGrypeDBSyncTask:
         )
 
         assert sync_ran is True
+
+    def test_class_lock_called(self, mock_calls_for_sync, monkeypatch):
+        """
+        Verfies that the lock enter and exit methods are called to ensure that the lock is being used correctly
+        Verifies on matching checksum in order to assert the lock is called even when the task is not executed
+        """
+        checksum = "366ab0a94f4ed9c22f5cc93e4d8f6724163a357ae5190740c1b5f251fd706cc4"
+        mock_lock = MagicMock()
+        monkeypatch.setattr(GrypeDBSyncLock, "_lock", mock_lock)
+        mock_calls_for_sync(
+            mock_active_dbs=[GrypeDBMetadata(checksum=checksum)],
+            mock_local_checksum="",
+        )
+
+        monkeypatch.setattr(
+            GrypeDBSyncManager, "_update_grypedb", Mock(return_value=True)
+        )
+
+        sync_ran = GrypeDBSyncManager.run_grypedb_sync(
+            grypedb_file_path="test/bypass/catalog.txt"
+        )
+
+        assert sync_ran is True
+        assert mock_lock.acquire.called is True
+        assert mock_lock.release.called is True
 
     def test_lock_across_threads(self, setup_for_thread_testing):
         """
