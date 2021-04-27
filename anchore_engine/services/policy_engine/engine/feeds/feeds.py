@@ -651,15 +651,7 @@ class GrypeDBFeed(AnchoreServiceFeed):
         :return: number of records
         :rtype: int
         """
-        try:
-            return self._find_match(db).count()
-        except Exception:
-            logger.exception(
-                "Error getting feed data group record count in package feed for group: {}".format(
-                    group_name
-                )
-            )
-            raise
+        return self._find_match(db).count()
 
     def _flush_group(
         self, group_obj: FeedGroupMetadata, operation_id: Optional[str] = None
@@ -704,8 +696,8 @@ class GrypeDBFeed(AnchoreServiceFeed):
         image_ids = db.query(Image.id).all()
         errors = []
         for result in image_ids:
+            task_body = {"image_id": result.id}
             try:
-                task_body = {"image_id": result.id}
                 # if not q_client.is_inqueue(subscription_type, task_body):
                 q_client.enqueue(subscription_type, task_body)
             except Exception as err:
@@ -784,7 +776,6 @@ class GrypeDBFeed(AnchoreServiceFeed):
         :type operation_id: Optional[str], defaults to None
         :return:
         """
-        total_updated_count = 0
         result = build_group_sync_result()
         result["group"] = group_download_result.group
 
@@ -809,7 +800,7 @@ class GrypeDBFeed(AnchoreServiceFeed):
             tzinfo=datetime.timezone.utc
         )
         sync_started = time.time()
-
+        total_updated_count = 0
         try:
             if full_flush:
                 logger.info(
@@ -868,6 +859,16 @@ class GrypeDBFeed(AnchoreServiceFeed):
                                 )
                             )
                     total_updated_count += 1
+                    logger.info(
+                        log_msg_ctx(
+                            operation_id,
+                            group_download_result.feed,
+                            group_download_result.group,
+                            "DB Update Progress: {}/{}".format(
+                                total_updated_count, group_download_result.total_records
+                            ),
+                        )
+                    )
             else:
                 group_db_obj.count = self.record_count(group_db_obj.name, db)
                 db.commit()
@@ -877,7 +878,7 @@ class GrypeDBFeed(AnchoreServiceFeed):
                         operation_id,
                         group_download_result.feed,
                         group_download_result.group,
-                        "DB Update Progress: {}/{}".format(
+                        "DB Update Complete, Progress: {}/{}".format(
                             total_updated_count, group_download_result.total_records
                         ),
                     )
@@ -892,7 +893,7 @@ class GrypeDBFeed(AnchoreServiceFeed):
                 )
             )
             group_db_obj = self.group_by_name(group_download_result.group)
-            # There is potential failures that could happen when downloading,
+            # There are potential failures that could happen when downloading,
             # skipping updating the `last_sync` allows the system to retry
             if group_download_result.status == "complete":
                 group_db_obj.last_sync = download_started
@@ -908,7 +909,7 @@ class GrypeDBFeed(AnchoreServiceFeed):
                 )
             )
             self._enqueue_refresh_tasks(db)
-        except Exception as e:
+        except Exception as exc:
             logger.exception(
                 log_msg_ctx(
                     operation_id,
@@ -918,7 +919,7 @@ class GrypeDBFeed(AnchoreServiceFeed):
                 )
             )
             db.rollback()
-            raise e
+            raise GrypeDBFeedSyncError from exc
         finally:
             sync_time = time.time() - sync_started
             total_group_time = time.time() - download_started.timestamp()
