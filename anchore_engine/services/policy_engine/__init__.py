@@ -368,7 +368,6 @@ def handle_grypedb_sync(*args, **kwargs):
         GrypeDBSyncError,
     )
 
-    logger.info("searchthis Triggering handler for grypedbsync task")
     system_user = _system_creds()
 
     logger.info("init args: {}".format(kwargs))
