@@ -23,17 +23,15 @@ def get_api_conf():
 
 
 class APIResponse(object):
-    def __init__(self, status_code, response=None, binary=False):
+    def __init__(self, status_code, response=None):
         self.code = status_code
-        self.binary = binary
         if response is not None:
             self.url = response.url
 
             try:
-                if self.binary:
-                    self.body = response.content
-                else:
-                    self.body = response.json()
+                self.body = response.json()
+            except json.decoder.JSONDecodeError:
+                self.body = response.content
             except ValueError:
                 self.body = response.text or ""
 
@@ -149,7 +147,6 @@ def http_get(
     query=None,
     config: callable = get_api_conf,
     extra_headers=None,
-    binary=False,
 ):
 
     api_conf = config()
@@ -164,7 +161,7 @@ def http_get(
         params=query,
     )
 
-    return APIResponse(resp.status_code, response=resp, binary=binary)
+    return APIResponse(resp.status_code, response=resp)
 
 
 def http_del(path_parts, query=None, config: callable = get_api_conf):
