@@ -37,7 +37,7 @@ class TestObjectsRaw:
 
         def _post_raw_document(bucket, archive_id, filename):
             content = expected_content(filename)
-            resp = objects.add_raw_document(bucket, archive_id, content)
+            resp = objects.create_raw_object(bucket, archive_id, content)
 
             request.addfinalizer(lambda: objects.delete_document(bucket, archive_id))
 
@@ -47,7 +47,7 @@ class TestObjectsRaw:
 
     def test_post_raw_object(self, expected_content, bucket, archive_id, filename):
         content = expected_content(filename)
-        create_doc_resp = objects.add_raw_document(bucket, archive_id, content)
+        create_doc_resp = objects.create_raw_object(bucket, archive_id, content)
         # content, create_doc_resp = post_raw_document(bucket, archive_id, filename)
 
         assert create_doc_resp == http_utils.APIResponse(200)
@@ -58,7 +58,7 @@ class TestObjectsRaw:
 
     def test_get_raw_object(self, expected_content, bucket, archive_id, filename):
         content = expected_content(filename)
-        object_response = objects.get_raw_document(bucket, archive_id)
+        object_response = objects.get_raw_object(bucket, archive_id)
 
         assert object_response == http_utils.APIResponse(200)
         assert object_response.body == content
@@ -67,4 +67,4 @@ class TestObjectsRaw:
 class TestFailedGet:
     def test_failed_get(self):
         with pytest.raises(http_utils.RequestFailedError):
-            objects.get_raw_document("test_expected_failure", "test")
+            objects.get_raw_object("test_expected_failure", "test")

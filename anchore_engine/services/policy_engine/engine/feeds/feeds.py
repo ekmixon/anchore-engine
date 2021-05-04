@@ -741,7 +741,7 @@ class GrypeDBFeed(AnchoreServiceFeed):
             {GrypeDBMetadata.active: False}, synchronize_session="evaluate"
         )
         # insert new as active
-        object_url = catalog_client.create_raw_document(
+        object_url = catalog_client.create_raw_object(
             group_download_result.group, checksum, record.data
         )
         date_generated = rfc3339str_to_datetime(record.metadata["Date-Created"])

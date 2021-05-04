@@ -141,7 +141,7 @@ class GrypeDBSyncManager:
             else:
                 catalog_client = internal_client_for(CatalogClient, userId=None)
                 bucket, archive_id = active_grypedb.object_url.split("/")[-2::]
-                grypedb_document = catalog_client.get_raw_document(bucket, archive_id)
+                grypedb_document = catalog_client.get_raw_object(bucket, archive_id)
 
                 # verify integrity of data, create tempfile, and pass path to facade
                 GrypeDBFile.verify_integrity(grypedb_document, active_grypedb.checksum)

@@ -47,7 +47,7 @@ def delete_document(bucket: str, archiveid: str) -> http_utils.APIResponse:
     return del_document_resp
 
 
-def add_raw_document(
+def create_raw_object(
     bucket: str, archiveid: str, content: str
 ) -> http_utils.APIResponse:
     if not bucket:
@@ -73,7 +73,7 @@ def add_raw_document(
     return create_document_resp
 
 
-def get_raw_document(bucket: str, archiveid: str) -> http_utils.APIResponse:
+def get_raw_object(bucket: str, archiveid: str) -> http_utils.APIResponse:
     if not bucket:
         raise ValueError("Cannot get document from object store without bucket")
 
