@@ -289,7 +289,7 @@ class InternalServiceClient(object):
                 ensure_str(body[:512]) + "..." if body and len(body) > 512 else body
             )
         except UnicodeError:
-            log_body = "Unable to decode body for logging"
+            log_body = f"Unable to decode body for logging (binary string of length {len(body)})."
 
         logger.debug(
             "Dispatching: url={url}, headers={headers}, body={body}, params={params}, timeout=({conn_timeout}, {read_timeout}), files={files}".format(
