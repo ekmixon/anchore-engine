@@ -138,6 +138,14 @@ class FeedGroupMetadata(Base, UtilMixin):
 
 
 class GrypeDBMetadata(Base):
+    """
+    A data model for persisting the current active grype db that the system should use across all policy-engine instances
+    Each instance of policy engine witll use the active record in this table to determine the correct grype db
+    Primary key is checksum, which refers to the checksum of the tar file
+    The object url points to the location in object storage that the tar file is stored. This is used by processes that sync
+    There should only ever be a single active record. More than one indicates an error in the system
+    """
+
     __tablename__ = "grype_db_metadata"
 
     checksum = Column(String, primary_key=True)
