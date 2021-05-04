@@ -176,8 +176,7 @@ class FileListIterator(object):
             file_data = self._read_file(self._get_currentfile())
             self.current_file_index += 1
             return file_data
-        else:
-            raise StopIteration()
+        raise StopIteration()
 
 
 class FeedDataFileJsonIterator(object):
