@@ -107,7 +107,8 @@ class GrypeDBSyncManager:
         rtype: str
         """
         # get local grypedb checksum
-        return grype_wrapper.get_current_grype_db_checksum()
+        metadata = grype_wrapper.get_current_grype_db_metadata()
+        return metadata["checksum"]
 
     @classmethod
     def _check_sync_necessary(cls):
@@ -135,7 +136,7 @@ class GrypeDBSyncManager:
         """
         try:
             if grypedb_file_path:
-                grype_wrapper.update_grype_db(
+                grype_wrapper.init_grype_db_engine(
                     grypedb_file_path, active_grypedb.checksum
                 )
             else:
@@ -148,7 +149,7 @@ class GrypeDBSyncManager:
                 with GrypeDBStorage() as grypedb_file:
                     with grypedb_file.create_file(active_grypedb.checksum) as f:
                         f.write(grypedb_document)
-                    grype_wrapper.update_grype_db(
+                    grype_wrapper.init_grype_db_engine(
                         grypedb_file.path, active_grypedb.checksum
                     )
         except Exception as e:
